@@ -3,3 +3,9 @@
 @import url(../vendor/fonts.css);
 @import url(../blocks/root/root.css);
 @import url(../blocks/page/page.css);
+
+/* HEADER */
+@import url(../blocks/header/header.css);
+
+/* LOGO */
+@import url(../blocks/logo/logo.css);
