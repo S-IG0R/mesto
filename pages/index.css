@@ -9,3 +9,16 @@
 
 /* LOGO */
 @import url(../blocks/logo/logo.css);
+
+/* CONTENT */
+@import url(../blocks/content/content.css);
+
+/* PROFILE */
+@import url(../blocks/profile/profile.css);
+@import url(../blocks/profile/__common-container/profile__common-container.css);
+@import url(../blocks/profile/__avatar/profile__avatar.css);
+@import url(../blocks/profile/__text-container/profile__text-container.css);
+@import url(../blocks/profile/__hero-name/profile__hero-name.css);
+@import url(../blocks/profile/__hero-job/profile__hero-job.css);
+@import url(../blocks/profile/__edit-button/profile__edit-button.css);
+@import url(../blocks/profile/__add-button/profile__add-button.css);
