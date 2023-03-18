@@ -1,5 +1,6 @@
 .profile__common-container {
   display: flex;
+  position: relative;
 }
 
 @media (max-width: 767.98px) {

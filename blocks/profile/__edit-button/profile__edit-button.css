@@ -2,6 +2,7 @@
   width: 24px;
   height: 24px;
   margin-left: 18px;
+  margin-top: 37px;
   background-image: url(../../../images/edit-button.svg);
   background-color: transparent;
   border: none;
@@ -9,6 +10,7 @@
   background-position: center center;
   background-size: cover;
   object-fit: cover;
+  cursor: pointer;
 }
 
 .profile__edit-button:hover {
@@ -18,8 +20,8 @@
 @media (max-width: 767.98px) {
   .profile__edit-button {
     position: absolute;
-    right: 19px;
-    bottom: 32.5px;
+    right: -30px;
+    top: 153px;
     width: 18px;
     height: 18px;
     margin: 0;

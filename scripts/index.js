@@ -1,0 +1,26 @@
+let profileName = document.querySelector('.profile__hero-name'); //Профиль, Имя
+let profileJob = document.querySelector('.profile__hero-job'); //Профиль, Работа
+const popupOpenButton = document.querySelector('.profile__edit-button'); //Профиль, кнопка Ред.
+
+const popup = document.querySelector('.popup'); //Поп-ап
+let inputName = popup.querySelector('.popup__input-name'); //Поп-ап поле ввода Имени
+let inputJob = popup.querySelector('.popup__input-job'); //Поп-ап поле ввода Работы
+const popupForm = popup.querySelector('.popup__form'); //Поп-ап форма
+const popupCloseButton = popup.querySelector('.popup__close-btn'); //Кнопка крестик
+
+popupOpenButton.addEventListener('click', function(){
+  inputName.value = profileName.textContent;
+  inputJob.value = profileJob.textContent;
+  popup.classList.add('popup_display_visible');
+});
+
+popupCloseButton.addEventListener('click', function(){
+  popup.classList.remove('popup_display_visible');
+});
+
+popupForm.addEventListener('submit', function(evt){
+  evt.preventDefault();
+  profileName.textContent = inputName.value;
+  profileJob.textContent = inputJob.value;
+  popup.classList.remove('popup_display_visible');
+});
