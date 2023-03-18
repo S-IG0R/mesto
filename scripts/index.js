@@ -11,16 +11,16 @@ const popupCloseButton = popup.querySelector('.popup__close-btn'); //Кнопк�
 popupOpenButton.addEventListener('click', function(){
   inputName.value = profileName.textContent;
   inputJob.value = profileJob.textContent;
-  popup.classList.add('popup_display_visible');
+  popup.classList.add('popup_opened');
 });
 
 popupCloseButton.addEventListener('click', function(){
-  popup.classList.remove('popup_display_visible');
+  popup.classList.remove('popup_opened');
 });
 
 popupForm.addEventListener('submit', function(evt){
   evt.preventDefault();
   profileName.textContent = inputName.value;
   profileJob.textContent = inputJob.value;
-  popup.classList.remove('popup_display_visible');
+  popup.classList.remove('popup_opened');
 });

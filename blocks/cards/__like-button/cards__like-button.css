@@ -7,7 +7,6 @@
   transition: opacity .5s;
   background-position: center center;
   background-size: cover;
-  object-fit: cover;
 }
 
 .cards__like-button:hover {
