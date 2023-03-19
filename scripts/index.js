@@ -8,17 +8,21 @@ const inputJob = popup.querySelector('.popup__input-job'); //Поп-ап пол�
 const popupForm = popup.querySelector('.popup__form'); //Поп-ап форма
 const popupCloseButton = popup.querySelector('.popup__close-btn'); //Кнопка крестик
 
+//Функция открытия закрытия попап
+function openAndClosePopup () {
+  popup.classList.toggle('popup_opened');
+}
 
 //Нажали на кнопку Ред. профиля
 popupOpenButton.addEventListener('click', function(){
   inputName.value = profileName.textContent;
   inputJob.value = profileJob.textContent;
-  popup.classList.add('popup_opened');
+  openAndClosePopup();
 });
 
-//Нажали на кнопку Х в форме
+//Нажали на кнопку 'Х' в форме
 popupCloseButton.addEventListener('click', function(){
-  popup.classList.remove('popup_opened');
+  openAndClosePopup();
 });
 
 //Нажали на кнопку "сохранить" в форме
@@ -26,5 +30,5 @@ popupForm.addEventListener('submit', function(evt){
   evt.preventDefault();
   profileName.textContent = inputName.value;
   profileJob.textContent = inputJob.value;
-  popup.classList.remove('popup_opened');
+  openAndClosePopup();
 });
