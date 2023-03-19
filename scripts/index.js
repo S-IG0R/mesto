@@ -16,7 +16,7 @@ popupOpenButton.addEventListener('click', function(){
   popup.classList.add('popup_opened');
 });
 
-//Нажали на кнопку кнопку Х в форме
+//Нажали на кнопку Х в форме
 popupCloseButton.addEventListener('click', function(){
   popup.classList.remove('popup_opened');
 });
