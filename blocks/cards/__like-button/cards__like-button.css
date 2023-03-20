@@ -1,12 +1,13 @@
 .cards__like-button {
   width: 22px;
   height: 19px;
+  border: none;
   background-image: url(../../../images/like-button.svg);
   background-color: transparent;
-  border: none;
-  transition: opacity .5s;
   background-position: center center;
   background-size: cover;
+  transition: opacity .5s;
+  flex-shrink: 0;
 }
 
 .cards__like-button:hover {

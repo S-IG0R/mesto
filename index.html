@@ -13,58 +13,58 @@
       <img class="logo" src="./images/logo.svg" alt="Логотип Место">
     </header>
     <main class="content">
-      <section class="profile" aria-label="Профаил">
+      <section class="profile">
         <div class="profile__common-container">
           <img src="./images/profile-avatar.png" alt="Жак-Ив Кусто" class="profile__avatar">
           <div class="profile__text-container">
-            <p class="profile__hero-name">Жак-Ив Кусто</p>
+            <h1 class="profile__hero-name">Жак-Ив Кусто</h1>
             <p class="profile__hero-job">Исследователь океана</p>
           </div>
-          <button class="profile__edit-button"></button>
+          <button class="profile__edit-button" type="button"></button>
         </div>
-        <button class="profile__add-button"></button>
+        <button class="profile__add-button" type="button"></button>
       </section>
       <section class="cards" aria-label="Фотогалерея">
         <div class="cards__item">
           <img class="cards__image" src="./images/cape-flotsky.jpg" alt="мыс Флотский">
           <div class="cards__container">
-            <p class="cards__title">Мыс Флотский</p>
-            <button class="cards__like-button"></button>
+            <h2 class="cards__title">Мыс Флотский</h2>
+            <button class="cards__like-button" type="button"></button>
           </div>
         </div>
         <div class="cards__item">
           <img class="cards__image" src="./images/elements-elbrus.jpg" alt="Гора Эльбрус">
           <div class="cards__container">
-            <p class="cards__title">Гора Эльбрус</p>
-            <button class="cards__like-button"></button>
+            <h2 class="cards__title">Гора Эльбрус</h2>
+            <button class="cards__like-button" type="button"></button>
           </div>
         </div>
         <div class="cards__item">
           <img class="cards__image" src="./images/tatra-mountains.jpg" alt="Горы Татры">
           <div class="cards__container">
-            <p class="cards__title">Горы Татры</p>
-            <button class="cards__like-button"></button>
+            <h2 class="cards__title">Горы Татры</h2>
+            <button class="cards__like-button" type="button"></button>
           </div>
         </div>
         <div class="cards__item">
           <img class="cards__image" src="./images/giza.jpg" alt="Пирамиды в Гизе">
           <div class="cards__container">
-            <p class="cards__title">Гиза</p>
-            <button class="cards__like-button"></button>
+            <h2 class="cards__title">Гиза</h2>
+            <button class="cards__like-button" type="button"></button>
           </div>
         </div>
         <div class="cards__item">
           <img class="cards__image" src="./images/elements-dombay.jpg" alt="Домбай">
           <div class="cards__container">
-            <p class="cards__title">Домбай</p>
-            <button class="cards__like-button"></button>
+            <h2 class="cards__title">Домбай</h2>
+            <button class="cards__like-button" type="button"></button>
           </div>
         </div>
         <div class="cards__item">
           <img class="cards__image" src="./images/havasu-waterfall.jpg" alt="Водопад Хавасу">
           <div class="cards__container">
-            <p class="cards__title">Хавасу</p>
-            <button class="cards__like-button"></button>
+            <h2 class="cards__title">Хавасу</h2>
+            <button class="cards__like-button" type="button"></button>
           </div>
         </div>
       </section>
@@ -76,10 +76,10 @@
   <section class="popup" aria-label="Всплывающее окно">
     <div class="popup__container">
       <p class="popup__title">Редактировать профиль</p>
-      <button class="popup__close-btn"></button>
-      <form class="popup__form">
-        <input class="popup__input-name" type="text" placeholder="Имя">
-        <input class="popup__input-job" type="text" placeholder="Род деятельности">
+      <button class="popup__close-btn" type="button"></button>
+      <form class="popup__form" name="popup-form">
+        <input class="popup__input popup__input_el_name" type="text" placeholder="Имя">
+        <input class="popup__input popup__input_el_job" type="text" placeholder="Род деятельности">
         <button class="popup__submit-btn" type="submit">Сохранить</button>
       </form>
     </div>
