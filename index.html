@@ -31,7 +31,7 @@
       <p class="footer__copyright">2023 Mesto Russia</p>
     </footer>
   </div>
-  <section class="popup" aria-label="Всплывающее окно">
+  <section class="popup" aria-label="Модальное окно редактирования профиля">
     <div class="popup__container">
       <p class="popup__title">Редактировать профиль</p>
       <button class="popup__close-btn" type="button"></button>
@@ -42,6 +42,19 @@
       </form>
     </div>
   </section>
+
+  <section class="popup popup_type_add-photo" aria-label="Модальное окно загрузки фото">
+    <div class="popup__container">
+      <p class="popup__title">Новое место</p>
+      <button class="popup__close-btn" type="button"></button>
+      <form class="popup__form popup__form_el_add-pic" name="popup-add-pic">
+        <input class="popup__input popup__input_el_pic-name" type="text" placeholder="Название">
+        <input class="popup__input popup__input_el_pic-url" type="text" placeholder="Ссылка на картинку">
+        <button class="popup__submit-btn" type="submit">Сохранить</button>
+      </form>
+    </div>
+  </section>
+
   <template id="card-template">
     <div class="cards__item">
       <img class="cards__image" src="" alt="">

@@ -1,6 +1,7 @@
 const profileName = document.querySelector('.profile__hero-name'); //Профиль, Имя
 const profileJob = document.querySelector('.profile__hero-job'); //Профиль, Род деятельности
-const popupOpenButton = document.querySelector('.profile__edit-button'); //Профиль, кнопка Ред.
+const editProfileBtn = document.querySelector('.profile__edit-button'); //Профиль, кнопка Ред.
+const addNewPhotoBtn = document.querySelector('.profile__add-button');
 
 const popup = document.querySelector('.popup'); //Поп-ап
 const inputName = popup.querySelector('.popup__input_el_name'); //Поп-ап поле ввода Имени
@@ -17,32 +18,43 @@ const InitialCardsData = [
   {name: 'Хавасу', link: './images/havasu-waterfall.jpg'},
 ]
 
+//открываем поп-ап "добавление фото"
+function popupAddPhoto () {
+
+}
+
 //открываем поп-ап
-function openPopup () {
-  popup.classList.add('popup_opened');
+function openPopup (className) {
+  className.classList.add('popup_opened');
 }
 
 //закрываем поп-ап
-function closePopup () {
-  popup.classList.remove('popup_opened');
+function closePopup (className) {
+  className.classList.remove('popup_opened');
 }
 
+addNewPhotoBtn.addEventListener('click', function(){
+  openPopup(popup);
+})
+
 //Нажали на кнопку Ред. профиля
-popupOpenButton.addEventListener('click', function(){
+editProfileBtn.addEventListener('click', function(){
   inputName.value = profileName.textContent;
   inputJob.value = profileJob.textContent;
-  openPopup();
+  openPopup(popup);
 });
 
 //Нажали на кнопку 'Х' в форме профиля
-popupCloseButton.addEventListener('click', closePopup);
-
+popupCloseButton.addEventListener('click', function(){
+  closePopup(popup);
+});
+  
 //Нажали на кнопку "сохранить" в форме
 popupForm.addEventListener('submit', function(evt){
   evt.preventDefault();
   profileName.textContent = inputName.value;
   profileJob.textContent = inputJob.value;
-  closePopup();
+  closePopup(popup);
 });
 
 //Функция заполнения карточки из массива
