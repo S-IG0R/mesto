@@ -8,7 +8,7 @@ const inputJob = popup.querySelector('.popup__input_el_job'); //Поп-ап по
 const popupForm = popup.querySelector('.popup__form'); //Поп-ап форма
 const popupCloseButton = popup.querySelector('.popup__close-btn'); //Кнопка крестик
 
-const cardsData = [
+const InitialCardsData = [
   {name: 'Мыс Флотский', link: './images/cape-flotsky.jpg'},
   {name: 'Гора Эльбрус', link: './images/elements-elbrus.jpg'},
   {name: 'Горы Татры', link: './images/tatra-mountains.jpg'},
@@ -46,7 +46,7 @@ popupForm.addEventListener('submit', function(evt){
 });
 
 //Функция заполнения карточки из массива
-function CreateFillPlaceCards (dataArray) {
+function CreateFillPlaceCards (dataArray, place) {
 
   dataArray.forEach ((item) => {
     //выбираем шаблон, клонируем содержимое
@@ -73,8 +73,12 @@ function CreateFillPlaceCards (dataArray) {
 
     //размещаем созданную и заполненную карточку в DOM
     const cardsSection = document.querySelector('.cards');
-    cardsSection.append(clonedContent);
+    if (place === 'end-node') {
+      cardsSection.append(clonedContent);
+    } if (place === 'start') {
+      cardsSection.prepend(clonedContent);
+    }
   });
 }
-
-CreateFillPlaceCards(cardsData);
+//Заполняем 6 карточками при загрузке
+CreateFillPlaceCards(InitialCardsData, 'end-node');
