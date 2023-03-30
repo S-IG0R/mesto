@@ -30,6 +30,7 @@
 @import url(../blocks/cards/__container/cards__container.css);
 @import url(../blocks/cards/__title/cards__title.css);
 @import url(../blocks/cards/__like-button/cards__like-button.css);
+@import url(../blocks/cards/__trash-button/cards__trash-button.css);
 @import url(../blocks/cards/__like-button/_active/cards__like-button_active.css);
 
 /* FOOTER */

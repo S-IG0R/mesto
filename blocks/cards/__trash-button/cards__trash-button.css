@@ -1,16 +1,19 @@
-.cards__like-button {
-  width: 22px;
+.cards__trash-button {
+  width: 18px;
   height: 19px;
   border: none;
-  background-image: url(../../../images/like-button.svg);
+  background-image: url(../../../images/trash-button.svg);
   background-color: transparent;
   background-position: center center;
   background-size: cover;
   transition: opacity .5s;
   flex-shrink: 0;
+  position: absolute;
+  top: 20px;
+  right: 20px;
   cursor: pointer;
 }
 
-.cards__like-button:hover {
+.cards__trash-button:hover {
   opacity: .5;
 }
