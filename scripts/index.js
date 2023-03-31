@@ -1,15 +1,18 @@
 const profileName = document.querySelector('.profile__hero-name'); //Профиль, Имя
 const profileJob = document.querySelector('.profile__hero-job'); //Профиль, Род деятельности
 const editProfileBtn = document.querySelector('.profile__edit-button'); //Профиль, кнопка Ред.
-const addNewPhotoBtn = document.querySelector('.profile__add-button');
 
-const popup = document.querySelector('.popup'); //Поп-ап
-const inputName = popup.querySelector('.popup__input_el_name'); //Поп-ап поле ввода Имени
-const inputJob = popup.querySelector('.popup__input_el_job'); //Поп-ап поле ввода Работы
-const popupForm = popup.querySelector('.popup__form'); //Поп-ап форма
-const popupCloseButton = popup.querySelector('.popup__close-btn'); //Кнопка крестик
+const addNewPhotoBtn = document.querySelector('.profile__add-button'); //Кнопка добавить фото
+const addNewPhotoPopup = document.querySelector('.popup_type_add-photo'); //Поп-ап добавления фото
 
-const InitialCardsData = [
+const editProfilePopup = document.querySelector('.popup_type_edit-profile'); //Поп-ап
+const inputName = editProfilePopup.querySelector('.popup__input_el_name'); //Поп-ап поле ввода Имени
+const inputJob = editProfilePopup.querySelector('.popup__input_el_job'); //Поп-ап поле ввода Работы
+const popupForm = editProfilePopup.querySelector('.popup__form'); //Поп-ап форма
+
+const popupCloseButton = editProfilePopup.querySelector('.popup__close-btn'); //Кнопка крестик
+
+const initialCardsData = [
   {name: 'Мыс Флотский', link: './images/cape-flotsky.jpg'},
   {name: 'Гора Эльбрус', link: './images/elements-elbrus.jpg'},
   {name: 'Горы Татры', link: './images/tatra-mountains.jpg'},
@@ -18,10 +21,6 @@ const InitialCardsData = [
   {name: 'Хавасу', link: './images/havasu-waterfall.jpg'},
 ]
 
-//открываем поп-ап "добавление фото"
-function popupAddPhoto () {
-
-}
 
 //открываем поп-ап
 function openPopup (className) {
@@ -33,22 +32,23 @@ function closePopup (className) {
   className.classList.remove('popup_opened');
 }
 
+//Нажали на кнопку добавить фото
 addNewPhotoBtn.addEventListener('click', function(){
-  openPopup(popup);
+  openPopup(addNewPhotoPopup);
 })
 
 //Нажали на кнопку Ред. профиля
 editProfileBtn.addEventListener('click', function(){
   inputName.value = profileName.textContent;
   inputJob.value = profileJob.textContent;
-  openPopup(popup);
+  openPopup(editProfilePopup);
 });
 
 //Нажали на кнопку 'Х' в форме профиля
 popupCloseButton.addEventListener('click', function(){
-  closePopup(popup);
+  closePopup(editProfilePopup);
 });
-  
+
 //Нажали на кнопку "сохранить" в форме
 popupForm.addEventListener('submit', function(evt){
   evt.preventDefault();
@@ -57,40 +57,45 @@ popupForm.addEventListener('submit', function(evt){
   closePopup(popup);
 });
 
-//Функция заполнения карточки из массива
-function CreateFillPlaceCards (dataArray, place) {
 
-  dataArray.forEach ((item) => {
-    //выбираем шаблон, клонируем содержимое
-    const templateContent = document.querySelector('#card-template').content;
-    const clonedContent = templateContent.querySelector('.cards__item').cloneNode(true);
+//  создаем карточку и заполняем данными
+const createCard = (cardData) => {
+  //копируем шаблон
+  const templateContent = document.querySelector('#card-template').content;
+  const copiedContent = templateContent.querySelector('.cards__item').cloneNode(true);
 
-    //заполняем карточку данными из массива
-    clonedContent.querySelector('.cards__image').src = item.link;
-    clonedContent.querySelector('.cards__image').alt = item.name;
-    clonedContent.querySelector('.cards__title').textContent = item.name;
+  //заполняем скопированный шаблон
+  copiedContent.querySelector('.cards__image').src = cardData.link;
+  copiedContent.querySelector('.cards__image').alt = cardData.name;
+  copiedContent.querySelector('.cards__title').textContent = cardData.name;
 
-    //вешаем слушатель на лайк, меняем состояния по клику
-    const likeButton = clonedContent.querySelector('.cards__like-button');
-    likeButton.addEventListener('click', (evt) => {
-      evt.target.classList.toggle('cards__like-button_active');
-    })
+  //обработка кнопки лайк
+  const likeButton = copiedContent.querySelector('.cards__like-button');
+  const handlerLikeBtn = () => {
+    likeButton.classList.toggle('cards__like-button_active');
+  }
+  likeButton.addEventListener('click', handlerLikeBtn);
 
-    //удаляем карточку кнопкой "ведро"
-    const trashButton = clonedContent.querySelector('.cards__trash-button');
-    trashButton.addEventListener('click', () => {
-      const cardsItem = trashButton.closest('.cards__item');
-      cardsItem.remove();
-    })
+  //обработка кнопки мусорка
+  const trashButton = copiedContent.querySelector('.cards__trash-button');
+  const handlerTrashBtn = () => {
+    copiedContent.remove();
+  }
+  trashButton.addEventListener('click', handlerTrashBtn);
 
-    //размещаем созданную и заполненную карточку в DOM
-    const cardsSection = document.querySelector('.cards');
-    if (place === 'end-node') {
-      cardsSection.append(clonedContent);
-    } if (place === 'start') {
-      cardsSection.prepend(clonedContent);
-    }
-  });
+  //возвращаем собранную и заполненную карточку
+  return copiedContent;
 }
-//Заполняем 6 карточками при загрузке
-CreateFillPlaceCards(InitialCardsData, 'end-node');
+
+//  размещаем карточку в DOM
+const cardsSection = document.querySelector('.cards');
+const placeCardInDom = (createdCard) => {
+  cardsSection.prepend(createdCard);
+}
+
+//читаем данные из массива -> передаем их в создания карточки, возвращаем -> передаем их в отрисовку карточки в DOM
+initialCardsData.forEach((itemDataArray) => {
+  placeCardInDom(createCard(itemDataArray));
+});
+
+
