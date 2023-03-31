@@ -5,12 +5,14 @@ const editProfileBtn = document.querySelector('.profile__edit-button'); //Про
 const addNewPhotoBtn = document.querySelector('.profile__add-button'); //Кнопка добавить фото
 const addNewPhotoPopup = document.querySelector('.popup_type_add-photo'); //Поп-ап добавления фото
 
-const editProfilePopup = document.querySelector('.popup_type_edit-profile'); //Поп-ап
-const inputName = editProfilePopup.querySelector('.popup__input_el_name'); //Поп-ап поле ввода Имени
-const inputJob = editProfilePopup.querySelector('.popup__input_el_job'); //Поп-ап поле ввода Работы
-const popupForm = editProfilePopup.querySelector('.popup__form'); //Поп-ап форма
+const editProfilePopup = document.querySelector('.popup_type_edit-profile'); //Поп-ап редактирования профиля
+const inputName = editProfilePopup.querySelector('.popup__input_el_name'); //поле ввода Имени
+const inputJob = editProfilePopup.querySelector('.popup__input_el_job'); //поле ввода Работы
+const editProfileForm = editProfilePopup.querySelector('.popup__form_type_edit-profile'); //Форма ред. профиля
 
-const popupCloseButton = editProfilePopup.querySelector('.popup__close-btn'); //Кнопка крестик
+const addNewPhotoForm = document.querySelector('.popup__form_type_add-pic'); //Форма добавления фото
+const inputPicName = addNewPhotoForm.querySelector('.popup__input_el_pic-name'); //поле ввода имени фото
+const inputPicUrl = addNewPhotoForm.querySelector('.popup__input_el_pic-url'); //поле ввода ссылки
 
 const initialCardsData = [
   {name: 'Мыс Флотский', link: './images/cape-flotsky.jpg'},
@@ -21,13 +23,24 @@ const initialCardsData = [
   {name: 'Хавасу', link: './images/havasu-waterfall.jpg'},
 ]
 
+const allPopups = document.querySelectorAll('.popup');
+const popupCloseBtn = (popup) => {
+  popup.forEach((arrayElement) => {
+    const closeBtn = arrayElement.querySelector('.popup__close-btn');
+    closeBtn.addEventListener('click', () => {
+      arrayElement.classList.remove('popup_opened');
+    })
+  });
+}
 
-//открываем поп-ап
+popupCloseBtn(allPopups);
+
+//открываем поп-ап редактирования профиля
 function openPopup (className) {
   className.classList.add('popup_opened');
 }
 
-//закрываем поп-ап
+//закрываем поп-ап ред. профиля
 function closePopup (className) {
   className.classList.remove('popup_opened');
 }
@@ -37,6 +50,14 @@ addNewPhotoBtn.addEventListener('click', function(){
   openPopup(addNewPhotoPopup);
 })
 
+addNewPhotoForm.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+  const inputNewPhotoData = {};
+  inputNewPhotoData.name = inputPicName.value;
+  inputNewPhotoData.link = inputPicUrl.value;
+  placeCardInDom(createCard(inputNewPhotoData));
+})
+
 //Нажали на кнопку Ред. профиля
 editProfileBtn.addEventListener('click', function(){
   inputName.value = profileName.textContent;
@@ -44,17 +65,12 @@ editProfileBtn.addEventListener('click', function(){
   openPopup(editProfilePopup);
 });
 
-//Нажали на кнопку 'Х' в форме профиля
-popupCloseButton.addEventListener('click', function(){
-  closePopup(editProfilePopup);
-});
-
 //Нажали на кнопку "сохранить" в форме
-popupForm.addEventListener('submit', function(evt){
+editProfileForm.addEventListener('submit', function(evt){
   evt.preventDefault();
   profileName.textContent = inputName.value;
   profileJob.textContent = inputJob.value;
-  closePopup(popup);
+  closePopup(editProfilePopup);
 });
 
 
@@ -82,6 +98,13 @@ const createCard = (cardData) => {
     copiedContent.remove();
   }
   trashButton.addEventListener('click', handlerTrashBtn);
+
+  //обработка клика по фото
+  const picButton =  copiedContent.querySelector('.cards__image');
+  const handlePicButton = () => {
+    console.log('pic click');
+  }
+  picButton.addEventListener('click', handlePicButton);
 
   //возвращаем собранную и заполненную карточку
   return copiedContent;
