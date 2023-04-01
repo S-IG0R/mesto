@@ -5,6 +5,8 @@ const editProfileBtn = document.querySelector('.profile__edit-button'); //Про
 const addNewPhotoBtn = document.querySelector('.profile__add-button'); //Кнопка добавить фото
 const addNewPhotoPopup = document.querySelector('.popup_type_add-photo'); //Поп-ап добавления фото
 
+const allPopups = document.querySelectorAll('.popup');
+
 const editProfilePopup = document.querySelector('.popup_type_edit-profile'); //Поп-ап редактирования профиля
 const inputName = editProfilePopup.querySelector('.popup__input_el_name'); //поле ввода Имени
 const inputJob = editProfilePopup.querySelector('.popup__input_el_job'); //поле ввода Работы
@@ -14,22 +16,27 @@ const addNewPhotoForm = document.querySelector('.popup__form_type_add-pic'); //�
 const inputPicName = addNewPhotoForm.querySelector('.popup__input_el_pic-name'); //поле ввода имени фото
 const inputPicUrl = addNewPhotoForm.querySelector('.popup__input_el_pic-url'); //поле ввода ссылки
 
+const viewPhotoPopup = document.querySelector('.popup_type_view-photo');
+const popupImage = viewPhotoPopup.querySelector('.popup__image');
+
+
 const initialCardsData = [
   {name: 'Мыс Флотский', link: './images/cape-flotsky.jpg'},
-  {name: 'Гора Эльбрус', link: './images/elements-elbrus.jpg'},
   {name: 'Горы Татры', link: './images/tatra-mountains.jpg'},
-  {name: 'Гиза', link: './images/giza.jpg'},
-  {name: 'Домбай', link: './images/elements-dombay.jpg'},
+  {name: 'Гора Эльбрус', link: './images/elements-elbrus.jpg'},
   {name: 'Хавасу', link: './images/havasu-waterfall.jpg'},
+  {name: 'Домбай', link: './images/elements-dombay.jpg'},
+  {name: 'Гиза', link: './images/giza.jpg'}
 ]
 
-const allPopups = document.querySelectorAll('.popup');
+
 const popupCloseBtn = (popup) => {
   popup.forEach((arrayElement) => {
     const closeBtn = arrayElement.querySelector('.popup__close-btn');
-    closeBtn.addEventListener('click', () => {
+    const handlerCloseBtn = () => {
       arrayElement.classList.remove('popup_opened');
-    })
+    }
+    closeBtn.addEventListener('click', handlerCloseBtn)
   });
 }
 
@@ -56,6 +63,7 @@ addNewPhotoForm.addEventListener('submit', (evt) => {
   inputNewPhotoData.name = inputPicName.value;
   inputNewPhotoData.link = inputPicUrl.value;
   placeCardInDom(createCard(inputNewPhotoData));
+  closePopup(addNewPhotoPopup);
 })
 
 //Нажали на кнопку Ред. профиля
@@ -101,8 +109,12 @@ const createCard = (cardData) => {
 
   //обработка клика по фото
   const picButton =  copiedContent.querySelector('.cards__image');
+  const popupCaption =  document.querySelector('.popup__picture-caption');
+
   const handlePicButton = () => {
-    console.log('pic click');
+    openPopup(viewPhotoPopup);
+    popupCaption.textContent = cardData.name;
+    popupImage.src = picButton.src;
   }
   picButton.addEventListener('click', handlePicButton);
 
