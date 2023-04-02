@@ -11,6 +11,7 @@
   transition: opacity .5s;
   background-position: center center;
   cursor: pointer;
+  display: block;
 }
 
 .profile__edit-button:hover {
