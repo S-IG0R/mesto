@@ -11,7 +11,6 @@
   transition: opacity .5s;
   align-self: center;
   cursor: pointer;
-  display: block;
 }
 
 .profile__add-button:hover {
