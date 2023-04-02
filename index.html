@@ -36,36 +36,33 @@
       <p class="popup__title">Редактировать профиль</p>
       <button class="popup__close-btn" type="button"></button>
       <form class="popup__form popup__form_type_edit-profile" name="popup-form">
-        <input class="popup__input popup__input_el_name" type="text" placeholder="Имя">
-        <input class="popup__input popup__input_el_job" type="text" placeholder="Род деятельности">
+        <input class="popup__input popup__input_el_name" type="text" placeholder="Имя" required>
+        <input class="popup__input popup__input_el_job" type="text" placeholder="Род деятельности" required>
         <button class="popup__submit-btn" type="submit">Сохранить</button>
       </form>
     </div>
   </section>
-
   <section class="popup popup_type_add-photo" aria-label="Модальное окно загрузки фото">
     <div class="popup__container">
       <p class="popup__title">Новое место</p>
       <button class="popup__close-btn" type="button"></button>
       <form class="popup__form popup__form_type_add-pic" name="popup-add-pic">
-        <input class="popup__input popup__input_el_pic-name" type="text" placeholder="Название">
-        <input class="popup__input popup__input_el_pic-url" type="text" placeholder="Ссылка на картинку">
+        <input class="popup__input popup__input_el_pic-name" type="text" placeholder="Название" required>
+        <input class="popup__input popup__input_el_pic-url" type="text" placeholder="Ссылка на картинку" required>
         <button class="popup__submit-btn" type="submit">Сохранить</button>
       </form>
     </div>
   </section>
-
   <section class="popup popup_type_view-photo" aria-label="Модальное окно просмотра фото">
     <div class="popup__img-container">
-      <img class="popup__image" src="" alt="">
-      <p class="popup__picture-caption">Какое то место где то</p>
+      <img class="popup__image" src="#" alt="#">
+      <p class="popup__picture-caption"></p>
       <button class="popup__close-btn" type="button"></button>
     </div>
   </section>
-
   <template id="card-template">
     <div class="cards__item">
-      <img class="cards__image" src="" alt="" role="button">
+      <img class="cards__image" src="#" alt="#" role="button">
       <div class="cards__container">
         <h2 class="cards__title"></h2>
         <button class="cards__like-button" type="button"></button>
@@ -73,6 +70,6 @@
       </div>
     </div>
   </template>
-  <script src="./scripts/index.js"></script>
+  <script src="./scripts/index.js" type="module"></script>
 </body>
 </html>
