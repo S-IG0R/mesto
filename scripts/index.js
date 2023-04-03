@@ -18,21 +18,21 @@ const addNewPhotoForm = document.querySelector('.popup__form_type_add-pic'); //�
 const inputPicName = addNewPhotoForm.querySelector('.popup__input_el_pic-name'); //поле ввода имени фото
 const inputPicUrl = addNewPhotoForm.querySelector('.popup__input_el_pic-url'); //поле ввода ссылки
 
-const viewPhotoPopup = document.querySelector('.popup_type_view-photo'); // поп-ап отобр. большое фото
-const popupImage = viewPhotoPopup.querySelector('.popup__image'); // фото поп-апа
+const viewPhotoPopup = document.querySelector('.popup_type_view-photo'); // поп-ап отобр. увеличенного фото
+const popupImage = viewPhotoPopup.querySelector('.popup__image'); // увеличенное фото поп-апа
 
 //Ищем все кнопки Х и вешаем слушатель для обработки закрытия
-const popupCloseBtn = (popup) => {
+const closePopupBtn = (popup) => {
   popup.forEach((arrayElement) => {
     const closeBtn = arrayElement.querySelector('.popup__close-btn');
-    const handlerCloseBtn = () => {
+    const handleCloseBtn = () => {
       closePopup(arrayElement);
     }
-    closeBtn.addEventListener('click', handlerCloseBtn)
+    closeBtn.addEventListener('click', handleCloseBtn);
   });
 }
 
-popupCloseBtn(allPopups);
+closePopupBtn(allPopups);
 
 //открываем поп-ап редактирования профиля
 function openPopup (className) {
@@ -58,8 +58,7 @@ const addNewPhotoFormHandler = (evt) => {
   inputNewPhotoData.link = inputPicUrl.value;
   placeCardInDom(createCard(inputNewPhotoData));
   closePopup(addNewPhotoPopup);
-  inputPicUrl.value = '';
-  inputPicName.value = '';
+  addNewPhotoForm.reset();
 }
 
 addNewPhotoForm.addEventListener('submit', addNewPhotoFormHandler)
@@ -104,21 +103,22 @@ const createCard = (cardData) => {
 
   //обработка кнопки мусорка
   const trashButton = copiedContent.querySelector('.cards__trash-button');
-  const handlerTrashBtn = () => {
+  const handleTrashBtn = () => {
     copiedContent.remove();
   }
-  trashButton.addEventListener('click', handlerTrashBtn);
+  trashButton.addEventListener('click', handleTrashBtn);
 
   //обработка клика по фото
   const clickPhoto =  copiedContent.querySelector('.cards__image');
   const popupCaption =  document.querySelector('.popup__picture-caption');
 
-  const handlePicButton = () => {
+  const handleClickPic = () => {
     openPopup(viewPhotoPopup);
     popupCaption.textContent = cardData.name;
+    popupImage.alt = cardData.name;
     popupImage.src = clickPhoto.src;
   }
-  clickPhoto.addEventListener('click', handlePicButton);
+  clickPhoto.addEventListener('click', handleClickPic);
 
   //возвращаем собранную и заполненную карточку
   return copiedContent;
