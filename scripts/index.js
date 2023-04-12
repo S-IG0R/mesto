@@ -139,4 +139,15 @@ initialCardsData.forEach((itemDataArray) => {
 });
 
 
+const closePopupClickOverlay = (popups) => {
+  const popupsOverlaysArr = Array.from(popups);
+  popupsOverlaysArr.forEach((overlayElement) => {
+    overlayElement.addEventListener('click', clickOverlayHandler);
+  });
+}
 
+const clickOverlayHandler = (evt) => {
+  closePopup(evt.target);
+}
+
+closePopupClickOverlay(popups);
