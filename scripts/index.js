@@ -8,6 +8,7 @@ const btnNewPhoto = document.querySelector('.profile__add-button'); //Кнопк
 const popupAddNewPhoto = document.querySelector('.popup_type_add-photo'); //Поп-ап добавления фото
 
 const popups = document.querySelectorAll('.popup'); // выбираем все поп-апы
+const popupsArray = Array.from(popups); // массив поп-апов
 
 const popupProfile = document.querySelector('.popup_type_edit-profile'); //Поп-ап редактирования профиля
 const inputName = popupProfile.querySelector('.popup__input_el_name'); //поле ввода Имени
@@ -42,6 +43,8 @@ closePopupBtn(popups);
 //открываем поп-ап редактирования профиля
 function openPopup (popup) {
   popup.classList.add('popup_opened');
+  closePopupClickOverlay(popupsArray);
+  closePopupPressEsc();
 }
 
 //закрываем поп-ап ред. профиля
@@ -139,15 +142,26 @@ initialCardsData.forEach((itemDataArray) => {
 });
 
 
-const closePopupClickOverlay = (popups) => {
-  const popupsOverlaysArr = Array.from(popups);
-  popupsOverlaysArr.forEach((overlayElement) => {
-    overlayElement.addEventListener('click', clickOverlayHandler);
-  });
+const closePopupClickOverlay = (popupsArray) => {
+  popupsArray.forEach((popup) => {
+    popup.addEventListener('click', clickOverlayHandler);
+  })
+
 }
 
 const clickOverlayHandler = (evt) => {
   closePopup(evt.target);
 }
 
-closePopupClickOverlay(popups);
+const closePopupPressEsc = () => {
+  document.addEventListener('keydown', pressEscHandler);
+}
+
+const pressEscHandler = (evt) => {
+  const popupOpened = document.querySelector('.popup_opened');
+  if (evt.key === 'Escape' && popupOpened){
+    closePopup(popupOpened);
+  }
+}
+
+
