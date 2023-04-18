@@ -15,18 +15,17 @@ const popups = document.querySelectorAll('.popup'); // выбираем все �
 const popupsArray = Array.from(popups); // массив поп-апов
 
 const popupProfile = document.querySelector('.popup_type_edit-profile'); //Поп-ап редактирования профиля
-
 const profileForm = popupProfile.querySelector('.popup__form_type_edit-profile'); //Форма ред. профиля
 const inputName = popupProfile.querySelector('.popup__input_el_name'); //поле ввода Имени
 const inputJob = popupProfile.querySelector('.popup__input_el_job'); //поле ввода Работы
 const inputsEditProfileForm = Array.from(profileForm.querySelectorAll('.popup__input'));
-
 const btnSubmitEditProfile = profileForm.querySelector('.popup__submit-btn');
 
 const photoForm = document.querySelector('.popup__form_type_add-pic'); //Форма добавления фото
 const inputsPhotoFormList = Array.from(photoForm.querySelectorAll('.popup__input'));
 const inputPhotoName = photoForm.querySelector('.popup__input_el_pic-name'); //поле ввода имени фото
 const inputPhotoUrl = photoForm.querySelector('.popup__input_el_pic-url'); //поле ввода ссылки
+const btnSubmitNewPhoto = photoForm.querySelector('.popup__submit-btn'); //Форма добавления фото
 
 const popupShowBigPhoto = document.querySelector('.popup_type_view-photo'); // поп-ап отобр. увеличенного фото
 const photoBig = popupShowBigPhoto.querySelector('.popup__image'); // увеличенное фото поп-апа
@@ -37,20 +36,11 @@ const templateContent = document.querySelector('#card-template').content; // З�
 const cardsSection = document.querySelector('.cards'); //Секция Cards
 
 
-// обработчик нажатия кнопки Esc
-const pressEscHandler = (evt) => {
-  const popupOpened = document.querySelector('.popup_opened');
-  if (evt.key === 'Escape' && popupOpened){
-    closePopup(popupOpened);
-  }
-}
-document.addEventListener('keydown', pressEscHandler);
-
-//установка слушателей попапам (оверлеям)
+//установка слушателей попапам и отслеживание нажатие либо на крестик либо на оверлей
 const setOverlayEvtListeners = (popupsArray) => {
   popupsArray.forEach((popup) => {
     popup.addEventListener('click', (evt) => {
-      if (evt.target === popup){
+      if (evt.target === evt.currentTarget || evt.target.classList.contains('popup__close-btn')){
         closePopup(popup);
       }
     });
@@ -59,47 +49,55 @@ const setOverlayEvtListeners = (popupsArray) => {
 
 setOverlayEvtListeners(popupsArray);
 
-const resetPhotoForm = () => {
-  photoForm.reset();
+
+// обработчик нажатия кнопки Esc
+const pressEscHandler = (evt) => {
+  if (evt.key === 'Escape') {
+    const popupOpened = document.querySelector('.popup_opened');
+    if (evt.key === 'Escape' && popupOpened) {
+      closePopup(popupOpened);
+    }
+  }
 }
 
-//Ищем все кнопки Х и вешаем слушатель для обработки закрытия
-const closePopupBtn = (popupsList) => {
-  popupsList.forEach((popup) => {
-    const btnClosePopup = popup.querySelector('.popup__close-btn');
-    const handleBtnClosePopup = (evt) => {
-      closePopup(popup);
-      if (popup === popupAddNewPhoto) {
-        resetPhotoForm();
-        inputsPhotoFormList.forEach((input) => {
-          hideInputError(photoForm, input, config);
-        });
-      }
-    }
-    btnClosePopup.addEventListener('click', handleBtnClosePopup);
+//сбрасываем поля формы
+const clearForm = (popup) => {
+  const form = popup.querySelector('.popup__form');
+  form.reset();
+}
+
+//очищаем ошибки в форме
+const clearInputErrors = (popup) => {
+  const form = popup.querySelector('.popup__form');
+  const formInputs = form.querySelectorAll('.popup__input');
+  formInputs.forEach((inputCurrent)=>{
+    hideInputError(form, inputCurrent, config);
   });
 }
-
-closePopupBtn(popups);
 
 //открываем поп-ап
 function openPopup (popup) {
   popup.classList.add('popup_opened');
+  document.addEventListener('keydown', pressEscHandler);
 }
 
 //закрываем поп-ап
 function closePopup (popup) {
   popup.classList.remove('popup_opened');
+  document.removeEventListener('keydown', pressEscHandler);
 }
 
 //Нажали на кнопку добавить фото
 const addNewPhotoHandler = () => {
+  clearForm(popupAddNewPhoto);
+  clearInputErrors(popupAddNewPhoto);
   openPopup(popupAddNewPhoto);
+  toggleBtnSubmitState(inputsPhotoFormList, btnSubmitNewPhoto, config);
 }
 
 btnNewPhoto.addEventListener('click', addNewPhotoHandler);
 
-//слушатель на форме добавления фото
+//обработчик сабмита добавления фото
 const addNewPhotoFormHandler = (evt) => {
   evt.preventDefault();
   const inputNewPhotoData = {};
@@ -107,23 +105,23 @@ const addNewPhotoFormHandler = (evt) => {
   inputNewPhotoData.link = inputPhotoUrl.value;
   placeCardInDom(createCard(inputNewPhotoData), cardsSection);
   closePopup(popupAddNewPhoto);
-  photoForm.reset();
 }
 
 photoForm.addEventListener('submit', addNewPhotoFormHandler);
 
 //Функция обработки слушателя кнопку Ред. профиля
 const editProfileBtnHandler = () => {
+  openPopup(popupProfile);
   //читаем значения профиля и записываем их в инпуты формы
   inputName.value = profileName.textContent;
   inputJob.value = profileJob.textContent;
   //переключаем состояние кнопки после запись в инпуты значений
   toggleBtnSubmitState(inputsEditProfileForm, btnSubmitEditProfile, config);
-  //проверяем состояние кнопки после запись в инпуты значений
-  inputsEditProfileForm.forEach((inputCurrent)=>{
+  //проверяем состояние полей после запись в инпуты значений
+  inputsEditProfileForm.forEach((inputCurrent)=> {
     isInputsValid(profileForm, inputCurrent, config);
   });
-  openPopup(popupProfile);
+
 }
 
 profileEditBtn.addEventListener('click', editProfileBtnHandler);
