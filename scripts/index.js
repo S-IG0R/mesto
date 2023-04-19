@@ -1,7 +1,7 @@
 import {initialCardsData} from './constants.js'
 import {toggleBtnSubmitState} from './validation.js'
 import {isInputsValid} from './validation.js'
-import {hideInputError} from './validation.js'
+import {clearInputErrors} from './validation.js'
 import {config} from './validation.js'
 
 const profileName = document.querySelector('.profile__hero-name'); //Профиль, Имя
@@ -66,14 +66,6 @@ const clearForm = (popup) => {
   form.reset();
 }
 
-//очищаем ошибки в форме
-const clearInputErrors = (popup) => {
-  const form = popup.querySelector('.popup__form');
-  const formInputs = form.querySelectorAll('.popup__input');
-  formInputs.forEach((inputCurrent)=>{
-    hideInputError(form, inputCurrent, config);
-  });
-}
 
 //открываем поп-ап
 function openPopup (popup) {

@@ -13,6 +13,15 @@ export const hideInputError = (form, input, config) => {
   errorElement.textContent = '';
 }
 
+//очищаем ошибки в форме
+export const clearInputErrors = (popup) => {
+  const form = popup.querySelector('.popup__form');
+  const formInputs = form.querySelectorAll('.popup__input');
+  formInputs.forEach((inputCurrent)=>{
+    hideInputError(form, inputCurrent, config);
+  });
+}
+
 //проверяем валидность текущего поля
 export const isInputsValid = (form, input, config) => {
   if (!input.validity.valid) {
