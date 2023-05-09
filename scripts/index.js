@@ -1,39 +1,39 @@
 import {initialCardsData} from './constants.js'
-import {toggleBtnSubmitState} from './validation.js'
-import {isInputsValid} from './validation.js'
-import {clearInputErrors} from './validation.js'
 import {config} from './validation.js'
+import {Card} from './Card.js'
+import {FormValidator} from './FormValidator.js'
 
-const profileName = document.querySelector('.profile__hero-name'); //Профиль, Имя
-const profileJob = document.querySelector('.profile__hero-job'); //Профиль, Род деятельности
-const profileEditBtn = document.querySelector('.profile__edit-button'); //Профиль, кнопка Ред.
-
-const btnNewPhoto = document.querySelector('.profile__add-button'); //Кнопка добавить фото
-const popupAddNewPhoto = document.querySelector('.popup_type_add-photo'); //Поп-ап добавления фото
-
+// Все поп-апы
 const popups = document.querySelectorAll('.popup'); // выбираем все поп-апы
 const popupsArray = Array.from(popups); // массив поп-апов
 
+// Редактирование профиля
+const profileName = document.querySelector('.profile__hero-name'); //Профиль, Имя
+const profileJob = document.querySelector('.profile__hero-job'); //Профиль, Род деятельности
+const profileEditBtn = document.querySelector('.profile__edit-button'); //Профиль, кнопка Ред.
 const popupProfile = document.querySelector('.popup_type_edit-profile'); //Поп-ап редактирования профиля
 const profileForm = popupProfile.querySelector('.popup__form_type_edit-profile'); //Форма ред. профиля
 const inputName = popupProfile.querySelector('.popup__input_el_name'); //поле ввода Имени
 const inputJob = popupProfile.querySelector('.popup__input_el_job'); //поле ввода Работы
 const inputsEditProfileForm = Array.from(profileForm.querySelectorAll('.popup__input'));
+
 const btnSubmitEditProfile = profileForm.querySelector('.popup__submit-btn');
 
+// Добавление нового фото
+const btnNewPhoto = document.querySelector('.profile__add-button'); //Кнопка добавить фото
+const popupAddNewPhoto = document.querySelector('.popup_type_add-photo'); //Поп-ап добавления фото
 const photoForm = document.querySelector('.popup__form_type_add-pic'); //Форма добавления фото
 const inputsPhotoFormList = Array.from(photoForm.querySelectorAll('.popup__input'));
 const inputPhotoName = photoForm.querySelector('.popup__input_el_pic-name'); //поле ввода имени фото
 const inputPhotoUrl = photoForm.querySelector('.popup__input_el_pic-url'); //поле ввода ссылки
 const btnSubmitNewPhoto = photoForm.querySelector('.popup__submit-btn'); //Форма добавления фото
 
+// Поп-ап с большим фото
 const popupShowBigPhoto = document.querySelector('.popup_type_view-photo'); // поп-ап отобр. увеличенного фото
 const photoBig = popupShowBigPhoto.querySelector('.popup__image'); // увеличенное фото поп-апа
 const popupCaption =  document.querySelector('.popup__picture-caption'); // Описание для попапа с фото в увелич. размере
 
-const templateContent = document.querySelector('#card-template').content; // Забираем контент шаблона
-
-const cardsSection = document.querySelector('.cards'); //Секция Cards
+const cardsSection = document.querySelector('.cards'); //Секция Cards - место куда добавляются карточки
 
 
 //установка слушателей попапам и отслеживание нажатие либо на крестик либо на оверлей
@@ -48,7 +48,6 @@ const setOverlayEvtListeners = (popupsArray) => {
 }
 
 setOverlayEvtListeners(popupsArray);
-
 
 // обработчик нажатия кнопки Esc
 const pressEscHandler = (evt) => {
@@ -66,25 +65,30 @@ const clearForm = (popup) => {
   form.reset();
 }
 
-
 //открываем поп-ап
-function openPopup (popup) {
+const openPopup = (popup) => {
   popup.classList.add('popup_opened');
   document.addEventListener('keydown', pressEscHandler);
 }
 
 //закрываем поп-ап
-function closePopup (popup) {
+const closePopup = (popup) => {
   popup.classList.remove('popup_opened');
   document.removeEventListener('keydown', pressEscHandler);
+}
+
+const checkValidationInput = (classFormValidation, formInputs) => {
+  formInputs.forEach((input)=> {
+    classFormValidation.isInputsValid(input);
+  })
 }
 
 //Нажали на кнопку добавить фото
 const addNewPhotoHandler = () => {
   clearForm(popupAddNewPhoto);
-  clearInputErrors(popupAddNewPhoto);
+  checkValidationInput(formValidationAddNewPhoto, inputsPhotoFormList);
   openPopup(popupAddNewPhoto);
-  toggleBtnSubmitState(inputsPhotoFormList, btnSubmitNewPhoto, config);
+  formValidationAddNewPhoto.toggleBtnSubmitState(inputsPhotoFormList, btnSubmitNewPhoto);
 }
 
 btnNewPhoto.addEventListener('click', addNewPhotoHandler);
@@ -95,8 +99,9 @@ const addNewPhotoFormHandler = (evt) => {
   const inputNewPhotoData = {};
   inputNewPhotoData.name = inputPhotoName.value;
   inputNewPhotoData.link = inputPhotoUrl.value;
-  placeCardInDom(createCard(inputNewPhotoData), cardsSection);
-  closePopup(popupAddNewPhoto);
+  const card = new Card(inputNewPhotoData,'#card-template', handleClickToImg);
+  placeCardInDom(card, cardsSection);
+  closePopup(popupAddNewPhoto);-
 }
 
 photoForm.addEventListener('submit', addNewPhotoFormHandler);
@@ -108,12 +113,9 @@ const editProfileBtnHandler = () => {
   inputName.value = profileName.textContent;
   inputJob.value = profileJob.textContent;
   //переключаем состояние кнопки после запись в инпуты значений
-  toggleBtnSubmitState(inputsEditProfileForm, btnSubmitEditProfile, config);
+  formValidationEditProfile.toggleBtnSubmitState(inputsEditProfileForm, btnSubmitEditProfile);
   //проверяем состояние полей после запись в инпуты значений
-  inputsEditProfileForm.forEach((inputCurrent)=> {
-    isInputsValid(profileForm, inputCurrent, config);
-  });
-
+  checkValidationInput(formValidationEditProfile, inputsEditProfileForm);
 }
 
 profileEditBtn.addEventListener('click', editProfileBtnHandler);
@@ -128,53 +130,30 @@ const editProfileFormHandler = (evt) => {
 
 profileForm.addEventListener('submit', editProfileFormHandler);
 
-
-//  создаем карточку и заполняем данными
-const createCard = (cardData) => {
-
-  const contentCopied = templateContent.querySelector('.cards__item').cloneNode(true);
-  const btnLike = contentCopied.querySelector('.cards__like-button');
-  const trashBinBtn = contentCopied.querySelector('.cards__trash-button');
-  const cardImage =  contentCopied.querySelector('.cards__image');
-  const cardTitle = contentCopied.querySelector('.cards__title');
-
-  //заполняем скопированный шаблон
-  cardImage.src = cardData.link;
-  cardImage.alt = cardData.name;
-  cardTitle.textContent = cardData.name;
-
-  //функция обработки кнопки лайк
-  const handleLikeBtn = () => {
-    btnLike.classList.toggle('cards__like-button_active');
-  }
-
-  //функция обработки кнопки мусорка
-  const handleTrashBinBtn = () => {
-    contentCopied.remove();
-  }
-
-  //функция обработки клика по фото в карточке
-  const handleClickPhotoInCard = () => {
-    openPopup(popupShowBigPhoto);
-    popupCaption.textContent = cardData.name;
-    photoBig.alt = cardData.name;
-    photoBig.src = cardData.link;
-  }
-  //слушатели событий
-  btnLike.addEventListener('click', handleLikeBtn);
-  trashBinBtn.addEventListener('click', handleTrashBinBtn);
-  cardImage.addEventListener('click', handleClickPhotoInCard);
-
-  //возвращаем собранную и заполненную карточку
-  return contentCopied;
+  // Обработчик клика по фото в карточке, открывает большое фото
+const handleClickToImg = (name, link) => {
+  popupCaption.textContent = name;
+  photoBig.alt = name;
+  photoBig.src = link;
+  openPopup(popupShowBigPhoto);
 }
 
-//размещаем собранную карточку в DOM
-const placeCardInDom = (cardCreated, place) => {
-  place.prepend(cardCreated);
+  // Размещаем собранную карточку в DOM
+const placeCardInDom = (newCard, place) => {
+  place.prepend(newCard.generateCard());
 }
 
-//читаем данные из массива -> передаем их в создания карточки, возвращаем -> передаем их в рендеринг карточки в DOM
-initialCardsData.forEach((itemDataArray) => {
-  placeCardInDom(createCard(itemDataArray), cardsSection);
+  // Перебираем массив начальных данных для 6 карточек
+initialCardsData.forEach((itemArray) => {
+  const card = new Card(itemArray,'#card-template', handleClickToImg);
+  placeCardInDom(card, cardsSection)
 });
+
+  // Валидация форм
+const formValidationAddNewPhoto = new FormValidator (config, photoForm);
+formValidationAddNewPhoto.enableValidation();
+
+const formValidationEditProfile = new FormValidator (config, profileForm);
+formValidationEditProfile.enableValidation();
+
+
