@@ -101,7 +101,7 @@ const addNewPhotoFormHandler = (evt) => {
   inputNewPhotoData.link = inputPhotoUrl.value;
   const card = new Card(inputNewPhotoData,'#card-template', handleClickToImg);
   placeCardInDom(card, cardsSection);
-  closePopup(popupAddNewPhoto);-
+  closePopup(popupAddNewPhoto);
 }
 
 photoForm.addEventListener('submit', addNewPhotoFormHandler);
