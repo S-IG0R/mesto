@@ -17,16 +17,13 @@ const inputName = popupProfile.querySelector('.popup__input_el_name'); //пол�
 const inputJob = popupProfile.querySelector('.popup__input_el_job'); //поле ввода Работы
 const inputsEditProfileForm = Array.from(profileForm.querySelectorAll('.popup__input'));
 
-const btnSubmitEditProfile = profileForm.querySelector('.popup__submit-btn');
-
 // Добавление нового фото
 const btnNewPhoto = document.querySelector('.profile__add-button'); //Кнопка добавить фото
-const popupAddNewPhoto = document.querySelector('.popup_type_add-photo'); //Поп-ап добавления фото
+const popupAddPhoto = document.querySelector('.popup_type_add-photo'); //Поп-ап добавления фото
 const photoForm = document.querySelector('.popup__form_type_add-pic'); //Форма добавления фото
-const inputsPhotoFormList = Array.from(photoForm.querySelectorAll('.popup__input'));
+const inputsPhotoForm = Array.from(photoForm.querySelectorAll('.popup__input'));
 const inputPhotoName = photoForm.querySelector('.popup__input_el_pic-name'); //поле ввода имени фото
 const inputPhotoUrl = photoForm.querySelector('.popup__input_el_pic-url'); //поле ввода ссылки
-const btnSubmitNewPhoto = photoForm.querySelector('.popup__submit-btn'); //Форма добавления фото
 
 // Поп-ап с большим фото
 const popupShowBigPhoto = document.querySelector('.popup_type_view-photo'); // поп-ап отобр. увеличенного фото
@@ -37,7 +34,7 @@ const cardsSection = document.querySelector('.cards'); //Секция Cards - м
 
 
 //установка слушателей попапам и отслеживание нажатие либо на крестик либо на оверлей
-const setOverlayEvtListeners = (popupsArray) => {
+const setClosePopupListeners = (popupsArray) => {
   popupsArray.forEach((popup) => {
     popup.addEventListener('click', (evt) => {
       if (evt.target === evt.currentTarget || evt.target.classList.contains('popup__close-btn')){
@@ -47,13 +44,13 @@ const setOverlayEvtListeners = (popupsArray) => {
   })
 }
 
-setOverlayEvtListeners(popupsArray);
+setClosePopupListeners(popupsArray);
 
 // обработчик нажатия кнопки Esc
-const pressEscHandler = (evt) => {
+const handleEscape = (evt) => {
   if (evt.key === 'Escape') {
     const popupOpened = document.querySelector('.popup_opened');
-    if (evt.key === 'Escape' && popupOpened) {
+    if(popupOpened){
       closePopup(popupOpened);
     }
   }
@@ -68,43 +65,42 @@ const clearForm = (popup) => {
 //открываем поп-ап
 const openPopup = (popup) => {
   popup.classList.add('popup_opened');
-  document.addEventListener('keydown', pressEscHandler);
+  document.addEventListener('keydown', handleEscape);
 }
 
 //закрываем поп-ап
 const closePopup = (popup) => {
   popup.classList.remove('popup_opened');
-  document.removeEventListener('keydown', pressEscHandler);
-}
-
-const checkValidationInput = (classFormValidation, formInputs) => {
-  formInputs.forEach((input)=> {
-    classFormValidation.isInputsValid(input);
-  })
+  document.removeEventListener('keydown', handleEscape);
 }
 
 //Нажали на кнопку добавить фото
-const addNewPhotoHandler = () => {
-  clearForm(popupAddNewPhoto);
-  checkValidationInput(formValidationAddNewPhoto, inputsPhotoFormList);
-  openPopup(popupAddNewPhoto);
-  formValidationAddNewPhoto.toggleBtnSubmitState(inputsPhotoFormList, btnSubmitNewPhoto);
+const openCardPopup = () => {
+  clearForm(popupAddPhoto);
+  formValidationAddNewPhoto.resetValidation();
+  openPopup(popupAddPhoto);
 }
 
-btnNewPhoto.addEventListener('click', addNewPhotoHandler);
+btnNewPhoto.addEventListener('click', openCardPopup);
 
-//обработчик сабмита добавления фото
-const addNewPhotoFormHandler = (evt) => {
+ // создаем карточку
+const createCard = (cardData, templateSelector, handleClickToImg) => {
+  const card = new Card(cardData, templateSelector, handleClickToImg);
+  return card.generateCard();
+}
+
+// обработчик сабмита добавления фото
+const handleCardFormSubmit  = (evt) => {
   evt.preventDefault();
-  const inputNewPhotoData = {};
-  inputNewPhotoData.name = inputPhotoName.value;
-  inputNewPhotoData.link = inputPhotoUrl.value;
-  const card = new Card(inputNewPhotoData,'#card-template', handleClickToImg);
+  const cardDataFromInputs = {};
+  cardDataFromInputs.name = inputPhotoName.value;
+  cardDataFromInputs.link = inputPhotoUrl.value;
+  const card = createCard(cardDataFromInputs, '#card-template', handleClickToImg);
   placeCardInDom(card, cardsSection);
-  closePopup(popupAddNewPhoto);
+  closePopup(popupAddPhoto);
 }
 
-photoForm.addEventListener('submit', addNewPhotoFormHandler);
+photoForm.addEventListener('submit', handleCardFormSubmit );
 
 //Функция обработки слушателя кнопку Ред. профиля
 const editProfileBtnHandler = () => {
@@ -112,10 +108,8 @@ const editProfileBtnHandler = () => {
   //читаем значения профиля и записываем их в инпуты формы
   inputName.value = profileName.textContent;
   inputJob.value = profileJob.textContent;
-  //переключаем состояние кнопки после запись в инпуты значений
-  formValidationEditProfile.toggleBtnSubmitState(inputsEditProfileForm, btnSubmitEditProfile);
-  //проверяем состояние полей после запись в инпуты значений
-  checkValidationInput(formValidationEditProfile, inputsEditProfileForm);
+  //переключаем состояние кнопки после запись в инпуты значений и сбрасываем ошибки
+  formValidationEditProfile.resetValidation();
 }
 
 profileEditBtn.addEventListener('click', editProfileBtnHandler);
@@ -140,13 +134,13 @@ const handleClickToImg = (name, link) => {
 
   // Размещаем собранную карточку в DOM
 const placeCardInDom = (newCard, place) => {
-  place.prepend(newCard.generateCard());
+  place.prepend(newCard);
 }
 
   // Перебираем массив начальных данных для 6 карточек
 initialCardsData.forEach((itemArray) => {
-  const card = new Card(itemArray,'#card-template', handleClickToImg);
-  placeCardInDom(card, cardsSection)
+  const card = createCard(itemArray, '#card-template', handleClickToImg);
+  placeCardInDom(card, cardsSection);
 });
 
   // Валидация форм

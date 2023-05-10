@@ -10,52 +10,38 @@ export class Card {
 
     //находим шаблон, копируем, возвращаем
   _cloneTemplate() {
-    const contentCloned = this._templateContent.querySelector('.cards__item').cloneNode(true);
-    return contentCloned;
+    return this._contentCloned = this._templateContent.querySelector('.cards__item').cloneNode(true);
   }
 
     //заполняем данные в скопированный шаблон, возвращаем заполненный
   generateCard() {
     this._cardElement = this._cloneTemplate();
-    this._cardElement.querySelector('.cards__image').src = this._link;
-    this._cardElement.querySelector('.cards__image').alt = this._name;
-    this._cardElement.querySelector('.cards__title').textContent = this._name;
+    this._cardImg = this._cardElement.querySelector('.cards__image');
+    this._cardTitle = this._cardElement.querySelector('.cards__title');
+    this._btnLike = this._cardElement.querySelector('.cards__like-button');
+    this._btnDelete = this._cardElement.querySelector('.cards__trash-button');
 
-    this._addEvtListenerToLikeBtn();
-    this._addEvtListenerToTrashBtn();
-    this._addEvtListenerToCardImage();
+    this._cardImg.src = this._link;
+    this._cardImg.alt = this._name;
+    this._cardTitle.textContent = this._name;
+
+    this._setEvtListeners();
 
     return this._cardElement;
   }
 
-    //устанавливаем слушатель на кнопку лайк
-  _addEvtListenerToLikeBtn () {
-    const btnLike = this._cardElement.querySelector('.cards__like-button');
-    btnLike.addEventListener('click', this._handleLikeBtn)
-  }
+  _setEvtListeners = () => {
+    this._btnLike.addEventListener('click', () => {
+      this._btnLike.classList.toggle('cards__like-button_active');
+    });
 
-    //обработчик лайка, переключает состояние
-  _handleLikeBtn = () => {
-    const btnLike = this._cardElement.querySelector('.cards__like-button');
-    btnLike.classList.toggle('cards__like-button_active');
-  }
+    this._btnDelete.addEventListener('click', () => {
+      this._cardElement.remove();
+    });
 
-    //устанавливаем слушатель кнопке мусорка
-  _addEvtListenerToTrashBtn () {
-    const trashBtn = this._cardElement.querySelector('.cards__trash-button');
-    trashBtn.addEventListener('click', this._handleTrashBtn)
-  }
-
-    //обработчик кнопки-мусорка, удаляет карточку
-  _handleTrashBtn = () => {
-    this._cardElement.remove();
-  }
-
-    //устанавливаем слушатель картинке в карточке
-  _addEvtListenerToCardImage () {
-    const cardImage = this._cardElement.querySelector('.cards__image');
-    cardImage.addEventListener('click', () => {
+    this._cardImg.addEventListener('click', () => {
       this._handleClickToImg(this._name, this._link);
     })
   }
+
 }
