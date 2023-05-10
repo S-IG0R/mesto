@@ -147,5 +147,3 @@ formValidationAddNewPhoto.enableValidation();
 
 const formValidationEditProfile = new FormValidator (config, profileForm);
 formValidationEditProfile.enableValidation();
-
-
