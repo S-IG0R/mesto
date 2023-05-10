@@ -15,13 +15,11 @@ const popupProfile = document.querySelector('.popup_type_edit-profile'); //По�
 const profileForm = popupProfile.querySelector('.popup__form_type_edit-profile'); //Форма ред. профиля
 const inputName = popupProfile.querySelector('.popup__input_el_name'); //поле ввода Имени
 const inputJob = popupProfile.querySelector('.popup__input_el_job'); //поле ввода Работы
-const inputsEditProfileForm = Array.from(profileForm.querySelectorAll('.popup__input'));
 
 // Добавление нового фото
 const btnNewPhoto = document.querySelector('.profile__add-button'); //Кнопка добавить фото
 const popupAddPhoto = document.querySelector('.popup_type_add-photo'); //Поп-ап добавления фото
 const photoForm = document.querySelector('.popup__form_type_add-pic'); //Форма добавления фото
-const inputsPhotoForm = Array.from(photoForm.querySelectorAll('.popup__input'));
 const inputPhotoName = photoForm.querySelector('.popup__input_el_pic-name'); //поле ввода имени фото
 const inputPhotoUrl = photoForm.querySelector('.popup__input_el_pic-url'); //поле ввода ссылки
 
