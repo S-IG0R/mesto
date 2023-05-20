@@ -1,9 +1,8 @@
 export class Card {
     //передаем массив с данными в конструктор
-  constructor(itemArray, templateSelector, handleClickToImg) {
-    this._name = itemArray.name;
-    this._alt = itemArray.name;
-    this._link = itemArray.link;
+  constructor({name, link}, templateSelector, handleClickToImg) {
+    this._name = name;
+    this._link = link;
     this._templateContent = document.querySelector(templateSelector).content;
     this._handleClickToImg = handleClickToImg;
   }

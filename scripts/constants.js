@@ -6,3 +6,5 @@ export const initialCardsData = [
   {name: 'Красное море', link: './images/red-sea.jpg'},
   {name: 'Гаваи', link: './images/hawaii.jpg'}
 ];
+
+export const containerSelector = document.querySelector('.cards');

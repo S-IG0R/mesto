@@ -1,7 +1,17 @@
-import {initialCardsData} from './constants.js'
-import {config} from './validation.js'
-import {Card} from './Card.js'
-import {FormValidator} from './FormValidator.js'
+import {initialCardsData} from '../scripts/constants.js'
+import {config} from '../scripts//validation.js'
+
+import {FormValidator} from '../components/FormValidator.js'
+import {Card} from '../components/Card.js'
+import {Section} from '../components/Section.js'
+import {Popup} from '../components/Popup.js'
+import {PopupWithForm} from '../components/PopupWithForm.js'
+import {PopupWithImage} from '../components/PopupWithImage.js'
+import {UserInfo} from '../components/UserInfo.js'
+
+import {
+  containerSelector
+} from '../scripts/constants.js'
 
 // Все поп-апы
 const popups = document.querySelectorAll('.popup'); // выбираем все поп-апы
@@ -30,7 +40,7 @@ const popupCaption =  document.querySelector('.popup__picture-caption'); // Оп
 
 const cardsSection = document.querySelector('.cards'); //Секция Cards - место куда добавляются карточки
 
-
+/*
 //установка слушателей попапам и отслеживание нажатие либо на крестик либо на оверлей
 const setClosePopupListeners = (popupsArray) => {
   popupsArray.forEach((popup) => {
@@ -44,6 +54,7 @@ const setClosePopupListeners = (popupsArray) => {
 
 setClosePopupListeners(popupsArray);
 
+
 // обработчик нажатия кнопки Esc
 const handleEscape = (evt) => {
   if (evt.key === 'Escape') {
@@ -53,13 +64,17 @@ const handleEscape = (evt) => {
     }
   }
 }
+*/
 
+/*
 //сбрасываем поля формы
 const clearForm = (popup) => {
   const form = popup.querySelector('.popup__form');
   form.reset();
 }
+*/
 
+/*
 //открываем поп-ап
 const openPopup = (popup) => {
   popup.classList.add('popup_opened');
@@ -71,22 +86,28 @@ const closePopup = (popup) => {
   popup.classList.remove('popup_opened');
   document.removeEventListener('keydown', handleEscape);
 }
+*/
 
 //Нажали на кнопку добавить фото
 const openCardPopup = () => {
-  clearForm(popupAddPhoto);
+  // clearForm(popupAddPhoto);
   formValidationAddNewPhoto.resetValidation();
-  openPopup(popupAddPhoto);
+  // openPopup(popupAddPhoto);
+  popupAddNewPhoto.open();
 }
 
 btnNewPhoto.addEventListener('click', openCardPopup);
 
+
+/*
  // создаем карточку
 const createCard = (cardData, templateSelector, handleClickToImg) => {
   const card = new Card(cardData, templateSelector, handleClickToImg);
   return card.generateCard();
 }
+*/
 
+/*
 // обработчик сабмита добавления фото
 const handleCardFormSubmit  = (evt) => {
   evt.preventDefault();
@@ -95,14 +116,18 @@ const handleCardFormSubmit  = (evt) => {
   cardDataFromInputs.link = inputPhotoUrl.value;
   const card = createCard(cardDataFromInputs, '#card-template', handleClickToImg);
   placeCardInDom(card, cardsSection);
-  closePopup(popupAddPhoto);
+  // closePopup(popupAddPhoto);
+  popupAddNewPhoto.close();
 }
 
 photoForm.addEventListener('submit', handleCardFormSubmit );
+*/
+
 
 //Функция обработки слушателя кнопку Ред. профиля
 const editProfileBtnHandler = () => {
-  openPopup(popupProfile);
+  popupEditProfile.open();
+  // openPopup(popupProfile);
   //читаем значения профиля и записываем их в инпуты формы
   inputName.value = profileName.textContent;
   inputJob.value = profileJob.textContent;
@@ -112,24 +137,32 @@ const editProfileBtnHandler = () => {
 
 profileEditBtn.addEventListener('click', editProfileBtnHandler);
 
+
+
 //Функция обработки слушателя события submit в форме ред. профиля
 const editProfileFormHandler = (evt) => {
   evt.preventDefault();
   profileName.textContent = inputName.value;
   profileJob.textContent = inputJob.value;
-  closePopup(popupProfile);
+  // closePopup(popupProfile);
+  popupEditProfile.close();
 }
 
 profileForm.addEventListener('submit', editProfileFormHandler);
 
+
+
   // Обработчик клика по фото в карточке, открывает большое фото
 const handleClickToImg = (name, link) => {
-  popupCaption.textContent = name;
-  photoBig.alt = name;
-  photoBig.src = link;
-  openPopup(popupShowBigPhoto);
+  // popupCaption.textContent = name;
+  // photoBig.alt = name;
+  // photoBig.src = link;
+  // openPopup(popupShowBigPhoto);
+  const popupWithImage = new PopupWithImage(name, link, popupShowBigPhoto);
+  popupWithImage.open();
 }
 
+/*
   // Размещаем собранную карточку в DOM
 const placeCardInDom = (newCard, place) => {
   place.prepend(newCard);
@@ -141,9 +174,70 @@ initialCardsData.forEach((itemArray) => {
   placeCardInDom(card, cardsSection);
 });
 
+*/
+
   // Валидация форм
 const formValidationAddNewPhoto = new FormValidator (config, photoForm);
 formValidationAddNewPhoto.enableValidation();
 
 const formValidationEditProfile = new FormValidator (config, profileForm);
 formValidationEditProfile.enableValidation();
+
+
+
+// размещаем 6 карточек по умолчанию
+const cardList = new Section (
+{
+  items: initialCardsData,
+  renderer: (cardElement) =>
+  {
+    const card = new Card (cardElement, '#card-template', handleClickToImg);
+    const createCard = card.generateCard();
+    cardList.addItem(createCard);
+  }
+},
+containerSelector
+)
+
+cardList.renderCards();
+
+
+
+// попапы редактировать профиль новое фото
+const popupAddNewPhoto = new Popup(popupAddPhoto);
+// popupAddNewPhoto.setEvtListeners();
+const popupEditProfile = new Popup(popupProfile);
+// popupEditProfile.setEvtListeners();
+// const popupWithImage = new PopupWithImage(popupShowBigPhoto);
+
+
+const popupWithProfile = new PopupWithForm ({
+  popupSelector: popupProfile,
+  formSubmit: (inputsData) => {
+
+  }
+});
+
+
+const popupAddNewPicture = new PopupWithForm (
+  {
+    popupSelector: popupAddPhoto,
+    formSubmit: (inputValues) => {
+      console.log(inputValues);
+
+      const addNewCard = new Section (
+        {
+          items: [inputValues],
+          renderer: (cardElement) =>
+          {
+            const card = new Card (cardElement, '#card-template', handleClickToImg);
+            const createCard = card.generateCard();
+            cardList.addItem(createCard);
+          }
+        },
+        containerSelector
+        )
+        addNewCard.renderCards();
+    }
+  }
+);
