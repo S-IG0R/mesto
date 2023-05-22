@@ -5,17 +5,16 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Место</title>
-  <link rel="stylesheet" href="./pages/index.css">
 </head>
 <body class="root">
   <div class="page">
     <header class="header">
-      <img class="logo" src="./images/logo.svg" alt="Логотип Место">
+      <img class="logo" src="<%=require('./images/logo.svg')%>" alt="Логотип Место">
     </header>
     <main class="content">
       <section class="profile">
         <div class="profile__common-container">
-          <img src="./images/profile-avatar.png" alt="Жак-Ив Кусто" class="profile__avatar">
+          <img src="<%=require('./images/profile-avatar.png')%>" alt="Жак-Ив Кусто" class="profile__avatar">
           <div class="profile__text-container">
             <h1 class="profile__hero-name">Жак-Ив Кусто</h1>
             <p class="profile__hero-job">Исследователь океана</p>
@@ -36,9 +35,9 @@
       <p class="popup__title">Редактировать профиль</p>
       <button class="popup__close-btn" type="button"></button>
       <form class="popup__form popup__form_type_edit-profile" name="popup-form" novalidate>
-          <input class="popup__input popup__input_el_name" id="input-name" type="text" placeholder="Имя" minlength="2" maxlength="40" required>
+          <input class="popup__input popup__input_el_name" name="name" id="input-name" type="text" placeholder="Имя" minlength="2" maxlength="40" required>
           <span class="input-name-error popup__input-error"></span>
-          <input class="popup__input popup__input_el_job" id="input-job" type="text" placeholder="Род деятельности" minlength="2" maxlength="200" required>
+          <input class="popup__input popup__input_el_job" name="job" id="input-job" type="text" placeholder="Род деятельности" minlength="2" maxlength="200" required>
           <span class="input-job-error popup__input-error"></span>
         <button class="popup__submit-btn" type="submit">Сохранить</button>
       </form>
@@ -74,6 +73,6 @@
       </div>
     </div>
   </template>
-  <script src="./pages/index.js" type="module"></script>
+
 </body>
 </html>
