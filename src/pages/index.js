@@ -1,21 +1,20 @@
-import './index.css'; // импорт для сборщика
+import '../pages/index.css'; // импорт для сборщика
 
-import {initialCardsData} from './scripts/constants.js'
-import {config} from './scripts/validation.js'
-
+import {config} from '../scripts/validation.js'
 
 // классы
-import {FormValidator} from './components/FormValidator.js'
-import {Card} from './components/Card.js'
-import {Section} from './components/Section.js'
-import {Popup} from './components/Popup.js'
-import {PopupWithForm} from './components/PopupWithForm.js'
-import {PopupWithImage} from './components/PopupWithImage.js'
-import {UserInfo} from './components/UserInfo.js'
+import {FormValidator} from '../components/FormValidator.js'
+import {Card} from '../components/Card.js'
+import {Section} from '../components/Section.js'
+import {Popup} from '../components/Popup.js'
+import {PopupWithForm} from '../components/PopupWithForm.js'
+import {PopupWithImage} from '../components/PopupWithImage.js'
+import {UserInfo} from '../components/UserInfo.js'
 
 
 // константы
 import {
+  initialCardsData,
   profileEditBtn,
   inputName,
   inputJob,
@@ -25,7 +24,7 @@ import {
   popupShowBigPhoto,
   profileForm,
   popupProfile
-} from './scripts/constants.js'
+} from '../scripts/constants.js'
 
 
 // обработчик нажатия на кнопку добавить новое фото
