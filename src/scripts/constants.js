@@ -14,17 +14,6 @@ export const initialCardsData = [
   {name: 'Гаваи', link: hawaii}
 ];
 
-/*
-export const initialCardsData = [
-  {name: 'Мыс Флотский', link: './images/cape-flotsky.jpg'},
-  {name: 'Горы Татры', link: './images/tatra-mountains.jpg'},
-  {name: 'Гора Эльбрус', link: './images/elements-elbrus.jpg'},
-  {name: 'Водопад Хавасу', link: './images/havasu-waterfall.jpg'},
-  {name: 'Красное море', link: './images/red-sea.jpg'},
-  {name: 'Гаваи', link: './images/hawaii.jpg'}
-];
-*/
-
 export const profileEditBtn = document.querySelector('.profile__edit-button'); //Профиль, кнопка Ред.
 export const popupProfile = document.querySelector('.popup_type_edit-profile'); //Поп-ап редактирования профиля
 export const profileForm = popupProfile.querySelector('.popup__form_type_edit-profile'); //Форма ред. профиля
