@@ -1,12 +1,13 @@
-import '../pages/index.css'; // импорт для сборщика
+// импорт для сборщика
+import '../pages/index.css';
 
+//настройки валидатора
 import {config} from '../scripts/validation.js'
 
 // классы
 import {FormValidator} from '../components/FormValidator.js'
 import {Card} from '../components/Card.js'
 import {Section} from '../components/Section.js'
-import {Popup} from '../components/Popup.js'
 import {PopupWithForm} from '../components/PopupWithForm.js'
 import {PopupWithImage} from '../components/PopupWithImage.js'
 import {UserInfo} from '../components/UserInfo.js'
@@ -30,7 +31,7 @@ import {
 // обработчик нажатия на кнопку добавить новое фото
 const openCardPopup = () => {
   formValidationAddNewPhoto.resetValidation();
-  popupAddNewPhoto.open();
+  popupAddNewPicture.open();
 }
 
 btnNewPhoto.addEventListener('click', openCardPopup);
@@ -39,9 +40,9 @@ btnNewPhoto.addEventListener('click', openCardPopup);
 
 // занесение данных профиля в поля ввода формы
 const setInputsProfileData = () => {
-  const {userName, userJob} = userInfo.getUserInfo();
-  inputName.value = userName;
-  inputJob.value = userJob;
+  const {name, job} = userInfo.getUserInfo();
+  inputName.value = name;
+  inputJob.value = job;
 }
 
 
@@ -57,14 +58,6 @@ profileEditBtn.addEventListener('click', editProfileBtnHandler);
 
 
 
-// Обработчик клика по фото в карточке, открывает большое фото
-const handleClickToImg = (name, link) => {
-  const popupWithImage = new PopupWithImage(name, link, popupShowBigPhoto);
-  popupWithImage.open();
-}
-
-
-
 // Валидация форм
 const formValidationAddNewPhoto = new FormValidator (config, photoForm);
 formValidationAddNewPhoto.enableValidation();
@@ -74,27 +67,29 @@ formValidationEditProfile.enableValidation();
 
 
 
+
+// Обработчик клика по фото в карточке, открывает большое фото
+const handleClickToImg = (name, link) => {
+  popupWithImage.open(name, link);
+}
+
+
+
+// функция создания новой карточки
+const createCard = (cardElement) => {
+  const card = new Card (cardElement, '#card-template', handleClickToImg);
+  return card.generateCard();
+}
+
+
 // размещение начальны карточек
-const cardList = new Section (
-{
-  items: initialCardsData,
-  renderer: (cardElement) =>
-  {
-    const card = new Card (cardElement, '#card-template', handleClickToImg);
-    const createCard = card.generateCard();
-    cardList.addItem(createCard);
-  }
+const cardList = new Section ((cardElement) => {
+  cardList.addItem(createCard(cardElement));
 },
 '.cards'
 )
 
-cardList.renderCards();
-
-
-
-// попапы редактировать профиль новое фото
-const popupAddNewPhoto = new Popup(popupAddPhoto);
-const popupEditProfile = new Popup(popupProfile);
+cardList.renderCards(initialCardsData);
 
 
 
@@ -102,12 +97,6 @@ const popupEditProfile = new Popup(popupProfile);
 const popupWithUserProfile = new PopupWithForm ({
   popupSelector: popupProfile,
   formSubmit: (inputsData) => {
-    const userInfo = new UserInfo (
-      {
-        userNameSelector: '.profile__hero-name',
-        userJobSelector: '.profile__hero-job'
-      }
-    )
     userInfo.setUserInfo(inputsData);
   }
 });
@@ -118,21 +107,18 @@ const popupWithUserProfile = new PopupWithForm ({
 const popupAddNewPicture = new PopupWithForm ({
   popupSelector: popupAddPhoto,
   formSubmit: (inputValues) => {
-    const addNewCard = new Section (
-      {
-        items: [inputValues],
-        renderer: (cardElement) =>
-        {
-          const card = new Card (cardElement, '#card-template', handleClickToImg);
-          const createCard = card.generateCard();
-          addNewCard.addItem(createCard);
-        }
-      },
-      '.cards'
-      )
-      addNewCard.renderCards();
-  }
+      addNewCard.renderCards([inputValues]);
+    }
   });
+
+
+
+//класс добавления нового фото через форму
+const addNewCard = new Section (
+  (cardElement) => {
+    addNewCard.addItem(createCard(cardElement));
+  },
+  '.cards')
 
 
 
@@ -143,3 +129,11 @@ const userInfo = new UserInfo (
     userJobSelector: '.profile__hero-job'
   }
 )
+
+
+
+// попап с увеличенной картинкой
+const popupWithImage = new PopupWithImage(popupShowBigPhoto);
+popupWithImage.setEvtListeners();
+
+

@@ -4,19 +4,17 @@ export class UserInfo {
     this._userJob = document.querySelector(userJobSelector);
   }
 
+  //возвращает объект с данными пользователя со стр
   getUserInfo () {
     return {
-      userName: this._userName.textContent,
-      userJob: this._userJob.textContent
+      name: this._userName.textContent,
+      job: this._userJob.textContent
     }
   }
 
+  //принимает новые данные из инпутов и добавляет их на страницу
   setUserInfo ({name, job}) {
     this._userName.textContent = name;
     this._userJob.textContent = job;
-    return {
-      userName: this._userName.textContent,
-      userJob: this._userJob.textContent
-    }
   }
 }
