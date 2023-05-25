@@ -15,12 +15,10 @@ export class Popup {
 
   _handleEscClose = (evt) => {
     if (evt.key === 'Escape') {
-      const popupOpened = document.querySelector('.popup_opened');
-      if (popupOpened) {
         this.close();
       }
     }
-  }
+  
 
   _handleBtnAndOverlayClose = (evt) => {
     if (evt.target === evt.currentTarget || evt.target.classList.contains('popup__close-btn')) {
