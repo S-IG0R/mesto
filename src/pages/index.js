@@ -11,11 +11,12 @@ import {Section} from '../components/Section.js'
 import {PopupWithForm} from '../components/PopupWithForm.js'
 import {PopupWithImage} from '../components/PopupWithImage.js'
 import {UserInfo} from '../components/UserInfo.js'
+import Api from '../components/Api.js'
 
 
 // константы
 import {
-  initialCardsData,
+  // initialCardsData,
   profileEditBtn,
   inputName,
   inputJob,
@@ -24,8 +25,50 @@ import {
   photoForm,
   popupShowBigPhoto,
   profileForm,
-  popupProfile
+  popupProfile,
+  avatarEditBtn,
+  popupWithAvatar,
+  avatarForm,
+  profileAvatar
 } from '../scripts/constants.js'
+
+
+//работа с сервером
+const api = new Api(
+  {
+    url: 'https://mesto.nomoreparties.co./v1/cohort-68',
+    headers: {
+      authorization: 'ca1ad0da-7d1b-4b57-af90-a949f65fb3b0',
+      'Content-Type': 'application/json'
+   }
+  }
+)
+
+
+//загрузка аватарки с сервера
+const loadAvatar = (avatarUrl) => {
+  profileAvatar.src = avatarUrl;
+}
+
+
+const loadUserInfo = () => {
+  api.getUserInfo().then((userData) => {
+    userInfo.setUserInfo(userData);
+    loadAvatar(userData.avatar);
+  }).catch(err => console.log(err))
+}
+
+loadUserInfo();
+
+
+// обработчик клика на аватарку
+const handleAvatarClick = () => {
+  formValidationAvatarEdit.resetValidation();
+  popupEditAvatar.open();
+}
+
+avatarEditBtn.addEventListener('click', handleAvatarClick)
+
 
 
 // обработчик нажатия на кнопку добавить новое фото
@@ -40,9 +83,9 @@ btnNewPhoto.addEventListener('click', openCardPopup);
 
 // занесение данных профиля в поля ввода формы
 const setInputsProfileData = () => {
-  const {name, job} = userInfo.getUserInfo();
+  const {name, about} = userInfo.getUserInfo();
   inputName.value = name;
-  inputJob.value = job;
+  inputJob.value = about;
 }
 
 
@@ -65,6 +108,8 @@ formValidationAddNewPhoto.enableValidation();
 const formValidationEditProfile = new FormValidator (config, profileForm);
 formValidationEditProfile.enableValidation();
 
+const formValidationAvatarEdit = new FormValidator (config, avatarForm);
+formValidationAvatarEdit.enableValidation();
 
 
 
@@ -74,7 +119,6 @@ const handleClickToImg = (name, link) => {
 }
 
 
-
 // функция создания новой карточки
 const createCard = (cardElement) => {
   const card = new Card (cardElement, '#card-template', handleClickToImg);
@@ -82,14 +126,21 @@ const createCard = (cardElement) => {
 }
 
 
-// размещение начальны карточек
+// размещение начальны карточек в DOM
 const cardList = new Section ((cardElement) => {
-  cardList.addItem(createCard(cardElement));
+  const card = createCard(cardElement)
+  cardList.addItem(card);
 },
 '.cards'
 )
 
-cardList.renderCards(initialCardsData);
+//загружаем карточки с сервера
+api.getInitialCards().then((cardsData) => {
+  cardList.renderCards(cardsData);
+})
+.catch(err => console.log(err))
+
+// cardList.renderCards(initialCardsData);
 
 
 
@@ -97,7 +148,11 @@ cardList.renderCards(initialCardsData);
 const popupWithUserProfile = new PopupWithForm ({
   popupSelector: popupProfile,
   formSubmit: (inputsData) => {
-    userInfo.setUserInfo(inputsData);
+    const {name, job: about} = inputsData;
+    api.setProfileData({name, about}).then(() => {
+      userInfo.setUserInfo({name, about});
+    })
+    .catch(err => console.log(err))
   }
 });
 
@@ -108,15 +163,25 @@ const popupAddNewPicture = new PopupWithForm ({
   popupSelector: popupAddPhoto,
   formSubmit: (inputValues) => {
       addNewCard.renderCards([inputValues]);
-    }
-  });
+  }
+});
 
+// попап редактирования аватара
+const popupEditAvatar = new PopupWithForm ({
+  popupSelector: popupWithAvatar,
+  formSubmit: (inputValue) => {
+    api.setUserAvatar(inputValue).then(() => {
+      loadAvatar(inputValue.avatar);
+    })
+    .catch(err => console.log(err))
+  }
+})
 
-
-//класс добавления нового фото через форму
+// размещение нового фото через форму
 const addNewCard = new Section (
   (cardElement) => {
-    addNewCard.addItem(createCard(cardElement));
+    const card = createCard(cardElement)
+    addNewCard.addItem(createCard(card));
   },
   '.cards')
 
@@ -135,5 +200,9 @@ const userInfo = new UserInfo (
 // попап с увеличенной картинкой
 const popupWithImage = new PopupWithImage(popupShowBigPhoto);
 popupWithImage.setEvtListeners();
+
+
+
+
 
 

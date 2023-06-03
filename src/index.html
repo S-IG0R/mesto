@@ -15,11 +15,11 @@
       <section class="profile">
         <div class="profile__common-container">
           <button class="profile__avatar-edit-btn">
-            <img src="<%=require('./images/profile-avatar.png')%>" alt="Жак-Ив Кусто" class="profile__avatar">
+            <img src="#" alt="#" class="profile__avatar">
           </button>
           <div class="profile__text-container">
-            <h1 class="profile__hero-name">Жак-Ив Кусто</h1>
-            <p class="profile__hero-job">Исследователь океана</p>
+            <h1 class="profile__hero-name"></h1>
+            <p class="profile__hero-job"></p>
           </div>
           <button class="profile__edit-button" type="button"></button>
         </div>
@@ -32,6 +32,31 @@
       <p class="footer__copyright">2023 Mesto Russia</p>
     </footer>
   </div>
+
+
+  <section class="popup popup_type_delete-card" aria-label="Модальное окно удаления картинки">
+    <div class="popup__container">
+      <p class="popup__title">Вы уверены?</p>
+      <button class="popup__close-btn" type="button"></button>
+      <form class="popup__form popup__form_type_edit-avatar" name="popup-avatar" novalidate>
+        <button class="popup__submit-btn" type="submit">Сохранить</button>
+      </form>
+    </div>
+  </section>
+
+  <section class="popup popup_type_edit-avatar" aria-label="Модальное окно редактирования аватара">
+    <div class="popup__container">
+      <p class="popup__title">Обновить аватар</p>
+      <button class="popup__close-btn" type="button"></button>
+      <form class="popup__form popup__form_type_edit-avatar" name="popup-avatar" novalidate>
+        <input class="popup__input popup__input_el_pic-url" name="avatar" id="input-avatar-url" type="url" placeholder="Ссылка на аватарку" required>
+        <span class="input-avatar-url-error popup__input-error"></span>
+        <button class="popup__submit-btn" type="submit">Сохранить</button>
+      </form>
+    </div>
+  </section>
+
+
   <section class="popup popup_type_edit-profile" aria-label="Модальное окно редактирования профиля">
     <div class="popup__container">
       <p class="popup__title">Редактировать профиль</p>
@@ -70,11 +95,13 @@
       <img class="cards__image" src="#" alt="#" role="button">
       <div class="cards__container">
         <h2 class="cards__title"></h2>
-        <button class="cards__like-button" type="button"></button>
+        <div class="card__like-container">
+          <button class="cards__like-button" type="button"></button>
+          <span class="card__like-counter">0</span>
+        </div>
         <button class="cards__trash-button" type="button"></button>
       </div>
     </div>
   </template>
-
 </body>
 </html>

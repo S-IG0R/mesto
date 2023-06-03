@@ -19,12 +19,12 @@ module.exports = {
     },
     module: {
       rules: [
-        {
-          //обрабатываем все js кроме папки node_modules
-          test: /\.js$/,
-          use: 'babel-loader',
-          exclude: '/node_modules/'
-        },
+        // {
+        //   //обрабатываем все js кроме папки node_modules
+        //   test: /\.js$/,
+        //   use: 'babel-loader',
+        //   exclude: '/node_modules/'
+        // },
         {
           // регулярное выражение, которое ищет все файлы с такими расширениями
           test: /\.(png|svg|jpg|gif|woff(2)?|eot|ttf|otf)$/,
