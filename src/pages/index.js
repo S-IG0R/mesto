@@ -51,14 +51,14 @@ const loadAvatar = (avatarUrl) => {
 }
 
 
-const loadUserInfo = () => {
+const getInitialData = () => {
   api.getUserInfo().then((userData) => {
     userInfo.setUserInfo(userData);
     loadAvatar(userData.avatar);
   }).catch(err => console.log(err))
 }
 
-loadUserInfo();
+getInitialData();
 
 
 // обработчик клика на аватарку
@@ -119,9 +119,20 @@ const handleClickToImg = (name, link) => {
 }
 
 
+const handleDeleteBtn = (cardId, removeCard) => {
+  api.deleteCard(cardId).then(() => removeCard)
+  .catch(err => console.log(err))
+}
+
 // функция создания новой карточки
 const createCard = (cardElement) => {
-  const card = new Card (cardElement, '#card-template', handleClickToImg);
+  const card = new Card (
+    cardElement,
+    '#card-template',
+    handleClickToImg,
+    userInfo.getUserInfo(),
+    handleDeleteBtn
+  );
   return card.generateCard();
 }
 
@@ -136,11 +147,9 @@ const cardList = new Section ((cardElement) => {
 
 //загружаем карточки с сервера
 api.getInitialCards().then((cardsData) => {
-  cardList.renderCards(cardsData);
+  cardList.renderCards(cardsData.reverse());
 })
 .catch(err => console.log(err))
-
-// cardList.renderCards(initialCardsData);
 
 
 
@@ -157,12 +166,14 @@ const popupWithUserProfile = new PopupWithForm ({
 });
 
 
-
 // попап добавления нового фото
 const popupAddNewPicture = new PopupWithForm ({
   popupSelector: popupAddPhoto,
   formSubmit: (inputValues) => {
+    api.addNewCard(inputValues).then(() => {
       addNewCard.renderCards([inputValues]);
+    })
+    .catch(err => console.log(err))
   }
 });
 
@@ -181,7 +192,7 @@ const popupEditAvatar = new PopupWithForm ({
 const addNewCard = new Section (
   (cardElement) => {
     const card = createCard(cardElement)
-    addNewCard.addItem(createCard(card));
+    addNewCard.addItem(card);
   },
   '.cards')
 
