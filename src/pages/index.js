@@ -11,7 +11,8 @@ import {Section} from '../components/Section.js'
 import {PopupWithForm} from '../components/PopupWithForm.js'
 import {PopupWithImage} from '../components/PopupWithImage.js'
 import {UserInfo} from '../components/UserInfo.js'
-import Api from '../components/Api.js'
+import {PopupWithConfirmation} from '../components/PopupWithConfirmation.js'
+import {Api} from '../components/Api.js'
 
 
 // константы
@@ -29,7 +30,8 @@ import {
   avatarEditBtn,
   popupWithAvatar,
   avatarForm,
-  profileAvatar
+  profileAvatar,
+  popupConfirmDeleteCard
 } from '../scripts/constants.js'
 
 
@@ -118,10 +120,38 @@ const handleClickToImg = (name, link) => {
   popupWithImage.open(name, link);
 }
 
-
+/*
 const handleDeleteBtn = (cardId, removeCard) => {
-  api.deleteCard(cardId).then(() => removeCard)
-  .catch(err => console.log(err))
+  popupConfirmDeleteCard.open()
+  // api.deleteCard(cardId).then(() => removeCard)
+  // .catch(err => console.log(err))
+}*/
+
+const handleClickDeleteBtn = () => {
+  popupWithConfirmation.open()
+}
+
+
+const submitDelete = (cardId, card) => {
+  popupWithConfirmation.handleSubmit(() => {
+    api.deleteCard(cardId).then(() => {
+      card.remove();
+    })
+    .catch(err => console.log(err))
+  })
+}
+
+const handleLikeCard = () => {
+
+    api.putLike(cardId).then((data) => {
+
+    })
+    .catch(err => console.log(err))
+
+    api.deleteLike(cardId).then((data) => {
+
+    })
+    .catch(err => console.log(err))
 }
 
 // функция создания новой карточки
@@ -131,7 +161,9 @@ const createCard = (cardElement) => {
     '#card-template',
     handleClickToImg,
     userInfo.getUserInfo(),
-    handleDeleteBtn
+    handleClickDeleteBtn,
+    submitDelete,
+    handleLikeCard
   );
   return card.generateCard();
 }
@@ -155,7 +187,7 @@ api.getInitialCards().then((cardsData) => {
 
 // попап редактирования профиля пользователя
 const popupWithUserProfile = new PopupWithForm ({
-  popupSelector: popupProfile,
+  popup: popupProfile,
   formSubmit: (inputsData) => {
     const {name, job: about} = inputsData;
     api.setProfileData({name, about}).then(() => {
@@ -168,10 +200,10 @@ const popupWithUserProfile = new PopupWithForm ({
 
 // попап добавления нового фото
 const popupAddNewPicture = new PopupWithForm ({
-  popupSelector: popupAddPhoto,
-  formSubmit: (inputValues) => {
-    api.addNewCard(inputValues).then(() => {
-      addNewCard.renderCards([inputValues]);
+  popup: popupAddPhoto,
+  formSubmit:(inputValues) => {
+    api.addNewCard(inputValues).then((data) => {
+      addNewCard.renderCards([data]);
     })
     .catch(err => console.log(err))
   }
@@ -179,18 +211,31 @@ const popupAddNewPicture = new PopupWithForm ({
 
 // попап редактирования аватара
 const popupEditAvatar = new PopupWithForm ({
-  popupSelector: popupWithAvatar,
+  popup: popupWithAvatar,
   formSubmit: (inputValue) => {
     api.setUserAvatar(inputValue).then(() => {
       loadAvatar(inputValue.avatar);
     })
     .catch(err => console.log(err))
   }
-})
+});
+
+
+const popupWithConfirmation = new PopupWithConfirmation({
+  popup: popupConfirmDeleteCard,
+  // submitForm: () => {
+  //   api.deleteCard(cardId).then(() => removeCard)
+  //   .catch(err => console.log(err))
+  // }
+});
+
+popupWithConfirmation.setEvtListeners()
+
+
+
 
 // размещение нового фото через форму
-const addNewCard = new Section (
-  (cardElement) => {
+const addNewCard = new Section ((cardElement) => {
     const card = createCard(cardElement)
     addNewCard.addItem(card);
   },

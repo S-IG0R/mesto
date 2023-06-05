@@ -38,4 +38,6 @@ export const photoForm = document.querySelector('.popup__form_type_add-pic'); //
 // Поп-ап с большим фото
 export const popupShowBigPhoto = document.querySelector('.popup_type_view-photo'); // поп-ап отобр. увеличенного фото
 
+//попап с подтверждением удаления карточки
+export const popupConfirmDeleteCard = document.querySelector('.popup_type_confirm-delete');
 

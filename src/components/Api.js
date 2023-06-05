@@ -1,4 +1,4 @@
-export default class Api {
+export class Api {
   constructor ({url, headers}) {
     this._url = url
     this._headers = headers;
@@ -60,6 +60,26 @@ export default class Api {
 
   deleteCard (cardId) {
     return fetch(`${this._url}/cards/${cardId}`,
+    {
+      method: 'DELETE',
+      headers: this._headers,
+    }
+    )
+    .then(this._result)
+  }
+
+  putLike (cardId) {
+    return fetch(`${this._url}/cards/${cardId}/likes`,
+    {
+      method: 'PUT',
+      headers: this._headers,
+    }
+    )
+    .then(this._result)
+  }
+
+  deleteLike (cardId) {
+    return fetch(`${this._url}/cards/${cardId}/likes`,
     {
       method: 'DELETE',
       headers: this._headers,

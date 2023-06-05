@@ -1,18 +1,18 @@
 export class Card {
-    //передаем массив с данными в конструктор
   constructor(
     {name, link, likes, owner, _id},
-    templateSelector, handleClickToImg, userInfo,
-    handleDeleteBtn) {
+    templateSelector, handleClickToImg, userInfo, handleClickDeleteBtn, submitDelete, handleLikeCard) {
     this._name = name;
     this._link = link;
     this._likes = likes.length;
-    this._cardId = _id;
     this._ownerCardId = owner._id;
+    this._cardId = _id;
     this._templateContent = document.querySelector(templateSelector).content;
     this._handleClickToImg = handleClickToImg;
     this._userId = userInfo.id;
-    this._handleDeleteBtn = handleDeleteBtn;
+    this._handleClickDeleteBtn = handleClickDeleteBtn;
+    this._submit = submitDelete;
+    this._likeCard = handleLikeCard;
   }
 
     //находим шаблон, копируем, возвращаем
@@ -36,6 +36,7 @@ export class Card {
 
     this._setEvtListeners();
     this._disableDeleteBtn();
+    this._removeCard();
 
     return this._cardElement;
   }
@@ -46,8 +47,10 @@ export class Card {
     });
 
     this._btnDelete.addEventListener('click', () => {
-      this._handleDeleteBtn(this._cardId, this._cardElement.remove())
-
+      this._handleClickDeleteBtn();
+      // this._cardElement.remove();
+      // this._popupDeleteCardConfirm.classList.add('popup_opened')
+      // this._handleDeleteBtn(this._cardId, this._cardElement.remove())
     });
 
     this._cardImg.addEventListener('click', () => {
@@ -59,6 +62,14 @@ export class Card {
     if(this._ownerCardId !== this._userId) {
       this._btnDelete.classList.add('cards__trash-button_disabled');
     }
+  }
+
+  _removeCard () {
+    this._submit(this._cardId, this._cardElement)
+  }
+
+  putLike () {
+
   }
 
 }
