@@ -1,0 +1,3 @@
+.popup__submit-btn_type_loading::after {
+  content: '...';
+}

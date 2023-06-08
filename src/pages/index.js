@@ -17,7 +17,6 @@ import {Api} from '../components/Api.js'
 
 // константы
 import {
-  // initialCardsData,
   profileEditBtn,
   inputName,
   inputJob,
@@ -31,11 +30,11 @@ import {
   popupWithAvatar,
   avatarForm,
   profileAvatar,
-  popupConfirmDeleteCard
+  popupConfirmDeleteCard,
 } from '../scripts/constants.js'
 
 
-//работа с сервером
+//инициализация класса работы с сервером
 const api = new Api(
   {
     url: 'https://mesto.nomoreparties.co./v1/cohort-68',
@@ -46,21 +45,37 @@ const api = new Api(
   }
 )
 
+//добавление кнопки сабмита '...' на время передачи на сервер данных
+const showLoadProcess = (state, selector) => {
+  const btnElement = document.querySelector(selector);
+  if (state) {
+    btnElement.classList.add('popup__submit-btn_type_loading');
+  } else {
+    btnElement.classList.remove('popup__submit-btn_type_loading');
+  }
+}
+
 
 //загрузка аватарки с сервера
-const loadAvatar = (avatarUrl) => {
-  profileAvatar.src = avatarUrl;
+const setAvatar = (avatar) => {
+  profileAvatar.src = avatar;
 }
 
 
-const getInitialData = () => {
-  api.getUserInfo().then((userData) => {
+// обработка запросов на сервер: начальные карточки и данные пользователя
+// используется самовызывающаяся ф-я IIFE
+(() => {
+  Promise.all([api.getUserInfo(), api.getInitialCards()])
+  .then(([userData, cardsData]) => {
+    //загружаем данные пользователя
     userInfo.setUserInfo(userData);
-    loadAvatar(userData.avatar);
-  }).catch(err => console.log(err))
-}
+    setAvatar(userInfo.getUserInfo().avatar);
+    //рендерим массив карточек с сервера
+    cardList.renderCards(cardsData.reverse());
+  })
+  .catch((err) => console.log(err));
+})()
 
-getInitialData();
 
 
 // обработчик клика на аватарку
@@ -120,51 +135,46 @@ const handleClickToImg = (name, link) => {
   popupWithImage.open(name, link);
 }
 
-/*
-const handleDeleteBtn = (cardId, removeCard) => {
-  popupConfirmDeleteCard.open()
-  // api.deleteCard(cardId).then(() => removeCard)
-  // .catch(err => console.log(err))
-}*/
-
-const handleClickDeleteBtn = () => {
-  popupWithConfirmation.open()
-}
-
-
-const submitDelete = (cardId, card) => {
+const handleSubmitDelete = (cardId, card) => {
+  popupWithConfirmation.open();
   popupWithConfirmation.handleSubmit(() => {
+  showLoadProcess(true, '.popup__submit-btn_type_confirm-delete');
     api.deleteCard(cardId).then(() => {
-      card.remove();
+      showLoadProcess(false, '.popup__submit-btn_type_confirm-delete');
+      card.remove()
+      popupWithConfirmation.close();
     })
     .catch(err => console.log(err))
   })
 }
 
-const handleLikeCard = () => {
 
+const handleLikeCard = (cardId, likeState, updLike) => {
+  if (!likeState) {
     api.putLike(cardId).then((data) => {
-
+      updLike(data);
     })
     .catch(err => console.log(err))
-
+  } else {
     api.deleteLike(cardId).then((data) => {
-
+      updLike(data);
     })
     .catch(err => console.log(err))
+  }
 }
 
 // функция создания новой карточки
 const createCard = (cardElement) => {
+
   const card = new Card (
     cardElement,
     '#card-template',
     handleClickToImg,
     userInfo.getUserInfo(),
-    handleClickDeleteBtn,
-    submitDelete,
+    handleSubmitDelete,
     handleLikeCard
   );
+
   return card.generateCard();
 }
 
@@ -177,21 +187,17 @@ const cardList = new Section ((cardElement) => {
 '.cards'
 )
 
-//загружаем карточки с сервера
-api.getInitialCards().then((cardsData) => {
-  cardList.renderCards(cardsData.reverse());
-})
-.catch(err => console.log(err))
-
-
 
 // попап редактирования профиля пользователя
 const popupWithUserProfile = new PopupWithForm ({
   popup: popupProfile,
   formSubmit: (inputsData) => {
+    showLoadProcess(true,'.popup__submit-btn_type_edit-bio');
     const {name, job: about} = inputsData;
     api.setProfileData({name, about}).then(() => {
       userInfo.setUserInfo({name, about});
+      showLoadProcess(false,'.popup__submit-btn_type_edit-bio');
+      popupWithUserProfile.close();
     })
     .catch(err => console.log(err))
   }
@@ -202,8 +208,11 @@ const popupWithUserProfile = new PopupWithForm ({
 const popupAddNewPicture = new PopupWithForm ({
   popup: popupAddPhoto,
   formSubmit:(inputValues) => {
+    showLoadProcess(true,'.popup__submit-btn_type_new-photo');
     api.addNewCard(inputValues).then((data) => {
       addNewCard.renderCards([data]);
+      showLoadProcess(false,'.popup__submit-btn_type_new-photo');
+      popupAddNewPicture.close();
     })
     .catch(err => console.log(err))
   }
@@ -213,8 +222,11 @@ const popupAddNewPicture = new PopupWithForm ({
 const popupEditAvatar = new PopupWithForm ({
   popup: popupWithAvatar,
   formSubmit: (inputValue) => {
+    showLoadProcess(true,'.popup__submit-btn_type_avatar-change');
     api.setUserAvatar(inputValue).then(() => {
-      loadAvatar(inputValue.avatar);
+      setAvatar(inputValue.avatar);
+      showLoadProcess(false,'.popup__submit-btn_type_avatar-change');
+      popupEditAvatar.close();
     })
     .catch(err => console.log(err))
   }
@@ -222,25 +234,18 @@ const popupEditAvatar = new PopupWithForm ({
 
 
 const popupWithConfirmation = new PopupWithConfirmation({
-  popup: popupConfirmDeleteCard,
-  // submitForm: () => {
-  //   api.deleteCard(cardId).then(() => removeCard)
-  //   .catch(err => console.log(err))
-  // }
+  popup: popupConfirmDeleteCard
 });
 
 popupWithConfirmation.setEvtListeners()
 
 
-
-
-// размещение нового фото через форму
+// размещение нового фото
 const addNewCard = new Section ((cardElement) => {
     const card = createCard(cardElement)
     addNewCard.addItem(card);
   },
   '.cards')
-
 
 
 // класс обработки данных
@@ -252,13 +257,8 @@ const userInfo = new UserInfo (
 )
 
 
-
 // попап с увеличенной картинкой
 const popupWithImage = new PopupWithImage(popupShowBigPhoto);
+
 popupWithImage.setEvtListeners();
-
-
-
-
-
 

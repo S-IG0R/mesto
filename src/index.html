@@ -15,7 +15,7 @@
       <section class="profile">
         <div class="profile__common-container">
           <button class="profile__avatar-edit-btn">
-            <img src="#" alt="#" class="profile__avatar">
+            <img src="#" alt="аватарка" class="profile__avatar">
           </button>
           <div class="profile__text-container">
             <h1 class="profile__hero-name"></h1>
@@ -32,14 +32,12 @@
       <p class="footer__copyright">2023 Mesto Russia</p>
     </footer>
   </div>
-
-
   <section class="popup popup_type_confirm-delete" aria-label="Модальное окно удаления картинки">
     <div class="popup__container">
       <p class="popup__title">Вы уверены?</p>
       <button class="popup__close-btn" type="button"></button>
       <form class="popup__form popup__form_type_confirm-delete" name="confirm-delete" novalidate>
-        <button class="popup__submit-btn" type="submit">Да</button>
+        <button class="popup__submit-btn popup__submit-btn_type_confirm-delete" type="submit">Да</button>
       </form>
     </div>
   </section>
@@ -50,7 +48,7 @@
       <form class="popup__form popup__form_type_edit-avatar" name="popup-avatar" novalidate>
         <input class="popup__input popup__input_el_pic-url" name="avatar" id="input-avatar-url" type="url" placeholder="Ссылка на аватарку" required>
         <span class="input-avatar-url-error popup__input-error"></span>
-        <button class="popup__submit-btn" type="submit">Сохранить</button>
+        <button class="popup__submit-btn popup__submit-btn_type_avatar-change" type="submit">Сохранить</button>
       </form>
     </div>
   </section>
@@ -63,7 +61,7 @@
           <span class="input-name-error popup__input-error"></span>
           <input class="popup__input popup__input_el_job" name="job" id="input-job" type="text" placeholder="Род деятельности" minlength="2" maxlength="200" required>
           <span class="input-job-error popup__input-error"></span>
-        <button class="popup__submit-btn" type="submit">Сохранить</button>
+        <button class="popup__submit-btn popup__submit-btn_type_edit-bio" type="submit">Сохранить</button>
       </form>
     </div>
   </section>
@@ -76,7 +74,7 @@
           <span class="input-pic-name-error popup__input-error"></span>
           <input class="popup__input popup__input_el_pic-url" name="link" id="input-pic-url" type="url" placeholder="Ссылка на картинку" required>
           <span class="input-pic-url-error popup__input-error"></span>
-        <button class="popup__submit-btn" type="submit">Создать</button>
+        <button class="popup__submit-btn popup__submit-btn_type_new-photo" type="submit">Создать</button>
       </form>
     </div>
   </section>

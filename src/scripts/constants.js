@@ -1,24 +1,7 @@
-import capeFlotsky from '../images/cape-flotsky.jpg'
-import mountainsTatra from '../images/tatra-mountains.jpg'
-import elbrus from '../images/elements-elbrus.jpg'
-import waterfall from '../images/havasu-waterfall.jpg'
-import redSea from '../images/red-sea.jpg'
-import hawaii from '../images/hawaii.jpg'
-
-// export const initialCardsData = [
-//   {name: 'Мыс Флотский', link: capeFlotsky},
-//   {name: 'Горы Татры', link: mountainsTatra},
-//   {name: 'Гора Эльбрус', link: elbrus},
-//   {name: 'Водопад Хавасу', link: waterfall},
-//   {name: 'Красное море', link: redSea},
-//   {name: 'Гаваи', link: hawaii}
-// ];
-
 //попап редактирования аватарки
 export const avatarEditBtn = document.querySelector('.profile__avatar-edit-btn');
 export const popupWithAvatar = document.querySelector('.popup_type_edit-avatar');
 export const avatarForm = popupWithAvatar.querySelector('.popup__form_type_edit-avatar');
-
 
 // попап реактирвания профиля
 export const profileEditBtn = document.querySelector('.profile__edit-button'); //Профиль, кнопка Ред.
@@ -40,4 +23,3 @@ export const popupShowBigPhoto = document.querySelector('.popup_type_view-photo'
 
 //попап с подтверждением удаления карточки
 export const popupConfirmDeleteCard = document.querySelector('.popup_type_confirm-delete');
-
