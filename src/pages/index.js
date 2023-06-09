@@ -45,18 +45,21 @@ const api = new Api(
   }
 )
 
-//добавление кнопки сабмита '...' на время передачи на сервер данных
+//отображение процесса загрузки '...'
 const showLoadProcess = (state, selector) => {
   const btnElement = document.querySelector(selector);
   if (state) {
-    btnElement.classList.add('popup__submit-btn_type_loading');
+    btnElement.textContent = 'Сохранение...';
+  }
+  else if (selector === '.popup__submit-btn_type_new-photo') {
+    btnElement.textContent = 'Создать';
   } else {
-    btnElement.classList.remove('popup__submit-btn_type_loading');
+    btnElement.textContent = 'Сохранить';
   }
 }
 
 
-//загрузка аватарки с сервера
+//загрузка аватарки
 const setAvatar = (avatar) => {
   profileAvatar.src = avatar;
 }
@@ -67,10 +70,10 @@ const setAvatar = (avatar) => {
 (() => {
   Promise.all([api.getUserInfo(), api.getInitialCards()])
   .then(([userData, cardsData]) => {
-    //загружаем данные пользователя
+      //загружаем данные пользователя в класс
     userInfo.setUserInfo(userData);
     setAvatar(userInfo.getUserInfo().avatar);
-    //рендерим массив карточек с сервера
+      //рендерим массив карточек с сервера
     cardList.renderCards(cardsData.reverse());
   })
   .catch((err) => console.log(err));
@@ -138,9 +141,7 @@ const handleClickToImg = (name, link) => {
 const handleSubmitDelete = (cardId, card) => {
   popupWithConfirmation.open();
   popupWithConfirmation.handleSubmit(() => {
-  showLoadProcess(true, '.popup__submit-btn_type_confirm-delete');
     api.deleteCard(cardId).then(() => {
-      showLoadProcess(false, '.popup__submit-btn_type_confirm-delete');
       card.remove()
       popupWithConfirmation.close();
     })
@@ -148,16 +149,16 @@ const handleSubmitDelete = (cardId, card) => {
   })
 }
 
-
+//Обработчик лайка
 const handleLikeCard = (cardId, likeState, updLike) => {
   if (!likeState) {
-    api.putLike(cardId).then((data) => {
-      updLike(data);
+    api.putLike(cardId).then((response) => {
+      updLike(response);
     })
     .catch(err => console.log(err))
   } else {
-    api.deleteLike(cardId).then((data) => {
-      updLike(data);
+    api.deleteLike(cardId).then((response) => {
+      updLike(response);
     })
     .catch(err => console.log(err))
   }
@@ -233,6 +234,7 @@ const popupEditAvatar = new PopupWithForm ({
 });
 
 
+//попап с подтверждением удаления
 const popupWithConfirmation = new PopupWithConfirmation({
   popup: popupConfirmDeleteCard
 });

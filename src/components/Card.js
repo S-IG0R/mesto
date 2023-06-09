@@ -29,6 +29,8 @@ export class Card {
     this._btnDelete = this._cardElement.querySelector('.cards__trash-button');
     this._likeCounter = this._cardElement.querySelector('.card__like-counter');
 
+    console.log('cardId: '+ this._ownerCardId, 'UserId: ' + this._userId)
+
     this._cardImg.src = this._link;
     this._cardImg.alt = this._name;
     this._cardTitle.textContent = this._name;
