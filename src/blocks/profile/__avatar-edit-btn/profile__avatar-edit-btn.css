@@ -9,6 +9,7 @@
   background-color: transparent;
   position: relative;
   border-radius: 50%;
+  padding: 0;
 }
 
 .profile__avatar-edit-btn::after {
