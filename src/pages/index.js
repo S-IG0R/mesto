@@ -29,7 +29,6 @@ import {
   avatarEditBtn,
   popupWithAvatar,
   avatarForm,
-  profileAvatar,
   popupConfirmDeleteCard,
 } from '../scripts/constants.js'
 
@@ -59,11 +58,6 @@ const showLoadProcess = (state, selector) => {
 }
 
 
-//загрузка аватарки
-const setAvatar = (avatar) => {
-  profileAvatar.src = avatar;
-}
-
 
 // обработка запросов на сервер: начальные карточки и данные пользователя
 // используется самовызывающаяся ф-я IIFE
@@ -72,7 +66,6 @@ const setAvatar = (avatar) => {
   .then(([userData, cardsData]) => {
       //загружаем данные пользователя в класс
     userInfo.setUserInfo(userData);
-    setAvatar(userInfo.getUserInfo().avatar);
       //рендерим массив карточек с сервера
     cardList.renderCards(cardsData.reverse());
   })
@@ -195,12 +188,14 @@ const popupWithUserProfile = new PopupWithForm ({
   formSubmit: (inputsData) => {
     showLoadProcess(true,'.popup__submit-btn_type_edit-bio');
     const {name, job: about} = inputsData;
-    api.setProfileData({name, about}).then(() => {
-      userInfo.setUserInfo({name, about});
-      showLoadProcess(false,'.popup__submit-btn_type_edit-bio');
+    api.setProfileData({name, about}).then((userData) => {
+      userInfo.setUserInfo(userData);
       popupWithUserProfile.close();
     })
     .catch(err => console.log(err))
+    .finally(() => {
+      showLoadProcess(false,'.popup__submit-btn_type_edit-bio');
+    })
   }
 });
 
@@ -212,10 +207,13 @@ const popupAddNewPicture = new PopupWithForm ({
     showLoadProcess(true,'.popup__submit-btn_type_new-photo');
     api.addNewCard(inputValues).then((data) => {
       addNewCard.renderCards([data]);
-      showLoadProcess(false,'.popup__submit-btn_type_new-photo');
+
       popupAddNewPicture.close();
     })
     .catch(err => console.log(err))
+    .finally(() => {
+      showLoadProcess(false,'.popup__submit-btn_type_new-photo');
+    })
   }
 });
 
@@ -224,12 +222,14 @@ const popupEditAvatar = new PopupWithForm ({
   popup: popupWithAvatar,
   formSubmit: (inputValue) => {
     showLoadProcess(true,'.popup__submit-btn_type_avatar-change');
-    api.setUserAvatar(inputValue).then(() => {
-      setAvatar(inputValue.avatar);
-      showLoadProcess(false,'.popup__submit-btn_type_avatar-change');
+    api.setUserAvatar(inputValue).then((userData) => {
+      userInfo.setUserInfo(userData);
       popupEditAvatar.close();
     })
     .catch(err => console.log(err))
+    .finally(() => {
+      showLoadProcess(false,'.popup__submit-btn_type_avatar-change');
+    })
   }
 });
 
@@ -254,7 +254,8 @@ const addNewCard = new Section ((cardElement) => {
 const userInfo = new UserInfo (
   {
     userNameSelector: '.profile__hero-name',
-    userJobSelector: '.profile__hero-job'
+    userJobSelector: '.profile__hero-job',
+    userAvatarSelector: '.profile__avatar'
   }
 )
 

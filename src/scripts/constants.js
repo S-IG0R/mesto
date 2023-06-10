@@ -10,9 +10,6 @@ export const profileForm = popupProfile.querySelector('.popup__form_type_edit-pr
 export const inputName = popupProfile.querySelector('.popup__input_el_name'); //поле ввода Имени
 export const inputJob = popupProfile.querySelector('.popup__input_el_job'); //поле ввода Работы
 
-//аватар
-export const profileAvatar = document.querySelector('.profile__avatar');
-
 // Добавление нового фото
 export const btnNewPhoto = document.querySelector('.profile__add-button'); //Кнопка добавить фото
 export const popupAddPhoto = document.querySelector('.popup_type_add-photo'); //Поп-ап добавления фото
