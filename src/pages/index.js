@@ -150,15 +150,15 @@ const handleSubmitDelete = (cardId, card) => {
 }
 
 //Обработчик лайка
-const handleLikeCard = (cardId, likeState, updLike) => {
+const handleLikeCard = (cardId, likeState, updateLike) => {
   if (!likeState) {
     api.putLike(cardId).then((response) => {
-      updLike(response);
+      updateLike(response);
     })
     .catch(err => console.log(err))
   } else {
     api.deleteLike(cardId).then((response) => {
-      updLike(response);
+      updateLike(response);
     })
     .catch(err => console.log(err))
   }

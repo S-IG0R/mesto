@@ -44,7 +44,7 @@ export class Card {
 
   _setEvtListeners = () => {
     this._btnLike.addEventListener('click', () => {
-      this._handleLikeCard(this._cardId, this._likeState, this.updLike)
+      this._handleLikeCard(this._cardId, this._likeState, this.updateLike)
     });
 
     this._btnDelete.addEventListener('click', () => {
@@ -78,7 +78,7 @@ export class Card {
     this._likeCounter.textContent = data;
   }
 
-  updLike = (data) => {
+  updateLike = (data) => {
     this._likeState = this._checkLikeState(data.likes);
     this._switchLike(this._likeState);
     this._setLikeToCounter(data.likes.length);
