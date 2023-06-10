@@ -207,7 +207,6 @@ const popupAddNewPicture = new PopupWithForm ({
     showLoadProcess(true,'.popup__submit-btn_type_new-photo');
     api.addNewCard(inputValues).then((data) => {
       addNewCard.renderCards([data]);
-
       popupAddNewPicture.close();
     })
     .catch(err => console.log(err))
